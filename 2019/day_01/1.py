@@ -2,8 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def _getfuelmass(mass):
-    f = mass//3 - 2
-    return f if f > 0 else 0
+    return max(mass//3 - 2, 0)
 
 def part1(masslist):
     return sum([ _getfuelmass(m) for m in masslist ])
