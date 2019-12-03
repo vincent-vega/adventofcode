@@ -52,7 +52,7 @@ public class Day02
     public static void main(String[] args)
     {
         List<Integer> values = new ArrayList<>();
-        try (Scanner sc = new Scanner(new File("input.txt"))){
+        try (Scanner sc = new Scanner(new File("input.txt"))) {
             while (sc.hasNext())
                 Stream.of(sc.next().split(",")).map(n -> Integer.valueOf(n)).forEach(n -> values.add(n));
             System.out.println(part1(values)); // 6087827
