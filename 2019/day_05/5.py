@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 def _run_op(values, instruction_ptr, sys_id):
-    POSITION_MODE  = 0
+    POSITION_MODE = 0
     instruction = values[instruction_ptr]
     def _get_param_value(v, i, m):
         return v[v[i%len(v)]%len(v)] if m == POSITION_MODE else v[i]
