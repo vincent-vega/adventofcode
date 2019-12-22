@@ -186,7 +186,7 @@ public class Day03
     {
         Day03 day = new Day03();
         WireMap m1 = day.new WireMap(), m2 = day.new WireMap();
-        try (Scanner sc = new Scanner(new File("input.txt"))){
+        try (Scanner sc = new Scanner(new File("input.txt"))) {
             Stream.of(sc.next().split(",")).forEach(s -> m1.set(s));
             Stream.of(sc.next().split(",")).forEach(s -> m2.set(s));
             System.out.println(day.part1(m1, m2)); // 529

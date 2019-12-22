@@ -17,7 +17,7 @@ def part1(min_N, max_N):
         else:
             return found_double
 
-    return len(list(filter(_rules, range(min_N, max_N + 1))))
+    return len([ x for x in range(min_N, max_N + 1) if _rules(x) ])
 
 def part2(min_N, max_N):
     def _rules(n):
@@ -35,7 +35,7 @@ def part2(min_N, max_N):
         else:
             return found_double
 
-    return len(list(filter(_rules, range(min_N, max_N + 1))))
+    return len([ x for x in range(min_N, max_N + 1) if _rules(x) ])
 
 if __name__ == '__main__':
     with open('input.txt') as f:

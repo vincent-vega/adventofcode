@@ -164,7 +164,7 @@ def part2(values: list) -> int:
     min_X = min(panels.keys(), key=lambda k: k[0])[0]
     s = ''
     for y in range(max_Y, max_Y - len(panels.keys()), -1):
-        row = sorted(list(filter(lambda k: k[1] == y, panels.keys())), key=lambda k: k[0])
+        row = sorted([ x for x in panels.key() if x[1] == y ], key=lambda k: k[0])
         if len(row) > 0:
             max_x_in_row = max(row, key=lambda c: c[0])[0]
             s += ''.join([ _draw(panels[(x, y)] if (x, y) in panels else ' ') for x in range(min_X, max_x_in_row) ]) + '\n'
