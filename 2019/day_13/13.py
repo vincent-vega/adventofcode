@@ -2,8 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from os import system
+from time import sleep
 
-def _run_op(state: dict, input_values: list) -> dict:
+def _run_op(state: dict) -> dict:
     POSITION_MODE  = 0
     IMMEDIATE_MODE = 1
     RELATIVE_MODE  = 2
@@ -44,12 +45,16 @@ def _run_op(state: dict, input_values: list) -> dict:
         state['instruction_ptr'] = i + 4
         return state
     def _set(state, i, m1, _, __):
-        _write_value(state, i + 1, input_values.pop(), m1)
-        state['instruction_ptr'] = i + 2
+        if len(state['input']) == 0:
+            state['input_req'] = True
+        else:
+            _write_value(state, i + 1, state['input'].pop(), m1)
+            state['instruction_ptr'] = i + 2
         return state
     def _out(state, i, m1, _, __):
+        val = _read_value(state, i + 1, m1)
+        state['output'].append(val)
         state['instruction_ptr'] = i + 2
-        state['output'] = _read_value(state, i + 1, m1)
         return state
     def _jump_true(state, i, m1, m2, _):
         v1 = _read_value(state, i + 1, m1)
@@ -97,84 +102,112 @@ def _run_op(state: dict, input_values: list) -> dict:
         99: _exit
     }[_get_opcode(instruction)](state, instruction_ptr, *_get_mode(instruction))
 
-def _run(values: list, state: dict, input_val: list) -> list:
-    out = []
-    while not state['exit']:
-        state = _run_op(state, input_val)
-        if state['output'] is not None:
-            out.append(state['output'])
-            state['output'] = None
-    #print(f'OUT => {out}')
-    return out
+def _run(state: dict) -> list:
+    while not state['exit'] and not state['input_req']:
+        state = _run_op(state)
+    return state
 
 def part1(values: list) -> int:
     state = {
         'values': list(values),
         'instruction_ptr': 0,
         'exit': False,
-        'output': None,
+        'input_req': False,
+        'input': [],
+        'output': [],
         'relative_base': 0
     }
-    out = _run(values, state, [])
+    out = _run(state)['output']
     return sum([ 1 if out[i] == 2 else 0 for i in range(2, len(out), 3) ])
 
-class Tile:
+def _pixel(n: int) -> str:
+    return {
+        0: ' ',
+        1: '#',
+        2: '*',
+        3: '=',
+        4: 'O'
+    }[n]
 
-    x: int
-    y: int
-    tile_id: int
-
-    def __init__(self, x, y, tile_id):
-        self.x = x
-        self.y = y
-        self.tile_id = tile_id
-
-def _print_screen(out: list) -> str:
-    #system('clear')
+def _screenshot(out: list) -> str:
     screen = ''
     for i in range(0, len(out), 3):
         if i > 0 and out[i] == 0:
             screen += '\n'
-        tile = ' '
-        if out[i + 2] == 1:
-            tile = '#'
-        elif out[i + 2] == 2:
-            tile = '*'
-        elif out[i + 2] == 3:
-            tile = '='
-        elif out[i + 2] == 4:
-            tile = 'O'
+        tile = _pixel(out[i + 2])
         screen += tile
-    return screen
+    #system('clear')
+    print(screen)
 
-def _get_elems(out: list) -> (list, list):
-    return sorted([ t for t in  [ out[i:i + 3] for i in range(0, len(out), 3) ] if t[2] > 2 ], key=lambda t: t[2])
+def _track_paddle(out: list, last_x: int) -> (int, int):
+    o = [ t for t in  [ out[i:i + 3] for i in range(0, len(out), 3) ] if t[2] == 3 ]
+    if len(o) > 0:
+        ball_x, ball_y, _ = o[0]
+        return ball_x, ball_y
+    return last_x, None
+
+def _track_ball(out: list, last_x: int) -> (int, int):
+    o = [ t for t in  [ out[i:i + 3] for i in range(0, len(out), 3) ] if t[2] == 4 ]
+    if len(o) > 0:
+        ball_x, ball_y, _ = o[0]
+        return ball_x, ball_y
+    return last_x, None
+
+def _refresh(out: list, diff: list) -> list:
+    score = None
+    for i in range(0, len(diff), 3):
+        x, y, n = diff[i:i + 3]
+        if x == -1 and y == 0:
+            score = n
+            continue
+        out[3*(37*y + x) + 2] = n
+    return score
+
+def _joystick(ball: list, paddle: list) -> int:
+    if ball[-1] > ball[-2]:
+        return 1 if ball[-1] > paddle[-1] else 0
+    elif  ball[-1] == ball[-2]:
+        return 1 if ball[-1] > paddle[-1] else 0 if ball[-1] == paddle[-1] else -1
+    elif ball[-1] < ball[-2]:
+        return 1 if ball[-1] > paddle[-1] else 0
 
 def part2(values: list) -> int:
     state = {
-        'values': list(values),
+        'values': [ 2 ] + list(values)[1:],
         'instruction_ptr': 0,
         'exit': False,
-        'output': None,
+        'input_req': False,
+        'input': [],
+        'output': [],
         'relative_base': 0
     }
-    out = _run(list(values), state, [ 2 ])
-    paddle_p, ball_p = _get_elems(out)
-    paddle = paddle_p
-    ball = ball_p
-    for _ in range(10):
-        print(_print_screen(out))
-        joystick = 1 if paddle[0] < ball[0] else -1 if paddle[0] > ball[0] else 0
-        out = _run(list(values), state, [ 2 ])
-        a = _get_elems(out)
-        #print(a)
-        paddle, ball = a[0], a[1]
-
-    #print(f'paddlex {paddle[0]} ballx {ball[0]}')
+    score = 0
+    state = _run(state)
+    screen = state['output']
+    #_screenshot(screen)
+    state['output'] = []
+    ball = [_track_ball(screen, 0)[0] ]
+    paddle = [ _track_paddle(screen, 0)[0] ]
+    while not state['exit']:
+        #sleep(0.001)
+        ball.append(_track_ball(screen, ball[-1])[0])
+        paddle.append(_track_paddle(screen, paddle[-1])[0])
+        if state['input_req']:
+            state['input_req'] = False
+            state['input'].append(_joystick(ball, paddle))
+        state = _run_op(state)
+        if len(state['output'])%3 == 0:
+            s = _refresh(screen, state['output'])
+            if s is not None:
+                score = s
+            state['output'] = []
+            #_screenshot(screen)
+        #print('score >>>', score)
+    return score
 
 if __name__ == '__main__':
     with open('input.txt') as f:
         values = list(map(int, f.read().split(',')))
-    print(part1(values)) # 286
-    #print(part2(values)) #
+    #print(part1(values)) # 286
+    print(part2(values)) #
 
