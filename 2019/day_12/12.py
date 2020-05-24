@@ -119,5 +119,4 @@ if __name__ == '__main__':
         moons = [ Moon(*p) for p in map(lambda l: [ int(x) for x in re.findall('-?\\d+', l) ], f.read().splitlines()) ]
     print(part1(list(moons), 1000)) # 14907
     print(part2(list(moons))) # 467081194429464
-    # assert part2(list(moons)) == 467081194429464
 
