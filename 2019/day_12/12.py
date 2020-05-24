@@ -19,7 +19,7 @@ def part2(moons: list) -> int:
     periods = [ None, None, None ]
     start = [ [ m.get_axis_status(axis) for m in moons ] for axis in range(3) ]
     for c in count():
-        if len([ 1 for p in periods if p is None ]) == 0:
+        if None not in periods:
             break
         _run(moons)
         for axis in range(3):
