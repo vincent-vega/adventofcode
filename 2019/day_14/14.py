@@ -7,11 +7,11 @@ import doctest
 
 
 def part1(B: dict, C: dict, R: list) -> int:
-    ore, _ = _compute(B, C, R, defaultdict(int))
+    ore = _compute(B, C, R, defaultdict(int))
     return ore
 
 
-def _compute(B: dict, C: dict, R: list, leftovers: dict) -> (int, dict):
+def _compute(B: dict, C: dict, R: list, leftovers: dict) -> int:
     need = defaultdict(int)
     for (count, what) in R:
         if leftovers[what] > 0:
@@ -24,7 +24,7 @@ def _compute(B: dict, C: dict, R: list, leftovers: dict) -> (int, dict):
         n = _break_down(B, C, what, count, leftovers)
         for w in n:
             need[w] += n[w]
-    return sum([ _how_much_ore(B, n, need[n]) for n in need ]), leftovers
+    return sum([ _how_much_ore(B, n, need[n]) for n in need ])
 
 
 def _break_down(B: dict, C: dict, what: str, quantity: int, leftovers: dict) -> dict:
