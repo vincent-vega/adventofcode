@@ -5,6 +5,7 @@ from collections import deque
 from intcode import Intcode
 from multiprocessing import Process, Manager
 
+
 def _main1(address: int, mailbox: dict, values: list):
     assert address in mailbox
     state = {
@@ -25,11 +26,12 @@ def _main1(address: int, mailbox: dict, values: list):
                 state['input'].extend([ x, y ])
             else:
                 state['input'].append(-1)
-        while len(state['output']) > 2 :
+        while len(state['output']) > 2:
             addr = state['output'].popleft()
             x = state['output'].popleft()
             y = state['output'].popleft()
             mailbox[addr].append((x, y))
+
 
 def _init(mgr: Manager) -> dict:
     d = mgr.dict()
@@ -37,6 +39,7 @@ def _init(mgr: Manager) -> dict:
         d[i] = mgr.list()
     d[255] = mgr.list()
     return d
+
 
 def part1(values: list) -> int:
     with Manager() as manager:
@@ -51,10 +54,11 @@ def part1(values: list) -> int:
         x, y = d[255].pop(0)
         return y
 
+
 def _nat(address: int, mailbox: dict, values: list):
     assert address in mailbox
     packet_mem = None
-    while True: # TODO
+    while True:  # TODO
         # lock mailbox
         # get messages
         # release mailbox
@@ -67,6 +71,7 @@ def _nat(address: int, mailbox: dict, values: list):
                 # TODO
                 pass
 
+
 def _main2(address: int, mailbox: dict, values: list):
     assert address in mailbox
     state = {
@@ -78,7 +83,7 @@ def _main2(address: int, mailbox: dict, values: list):
         'input_req': False,
         'relative_base': 0
     }
-    while not state['exit']: # TODO
+    while not state['exit']:  # TODO
         state = _run_op(state)
         if state['input_req']:
             state['input_req'] = False
@@ -87,11 +92,12 @@ def _main2(address: int, mailbox: dict, values: list):
                 state['input'].extend([ x, y ])
             else:
                 state['input'].append(-1)
-        while len(state['output']) > 2 :
+        while len(state['output']) > 2:
             addr = state['output'].popleft()
             x = state['output'].popleft()
             y = state['output'].popleft()
             mailbox[addr].append((x, y))
+
 
 def part2(values: list) -> int:
     with Manager() as manager:
@@ -107,9 +113,9 @@ def part2(values: list) -> int:
             p.join()
         nat.join()
 
+
 if __name__ == '__main__':
     with open('input.txt') as f:
         values = list(map(int, f.read().split(',')))
-    print(part1(values)) # 23815
-    #print(part2(values)) #
-
+    print(part1(values))  # 23815
+    # print(part2(values))  #

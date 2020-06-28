@@ -1,7 +1,7 @@
-class Intcode(object):
-    POSITION_MODE  = 0
+class Intcode:
+    POSITION_MODE = 0
     IMMEDIATE_MODE = 1
-    RELATIVE_MODE  = 2
+    RELATIVE_MODE = 2
 
     @staticmethod
     def _resize(mem, num):
@@ -41,10 +41,10 @@ class Intcode(object):
 
     @staticmethod
     def _mul(state, i, m1, m2, m3):
-        v = state['values']
+        # v = state['values']
         v1 = Intcode._read_value(state, i + 1, m1)
         v2 = Intcode._read_value(state, i + 2, m2)
-        Intcode._write_value(state, i + 3, v1*v2, m3)
+        Intcode._write_value(state, i + 3, v1 * v2, m3)
         state['instruction_ptr'] = i + 4
         return state
 
@@ -101,17 +101,17 @@ class Intcode(object):
         return state
 
     @staticmethod
-    def _exit(*argv):
+    def _exit(state, *argv):
         state['exit'] = True
         return state
 
     @staticmethod
     def _get_opcode(instr):
-        return instr%100
+        return instr % 100
 
     @staticmethod
     def _get_mode(instr):
-        return instr//100%10, instr//1000%10, instr//10000
+        return instr // 100 % 10, instr // 1000 % 10, instr // 10000
 
     @staticmethod
     def run_op(state: dict) -> dict:
@@ -119,15 +119,14 @@ class Intcode(object):
         values = state['values']
         instruction = values[instruction_ptr]
         return {
-            1:  Intcode._add,
-            2:  Intcode._mul,
-            3:  Intcode._set,
-            4:  Intcode._out,
-            5:  Intcode._jump_true,
-            6:  Intcode._jump_false,
-            7:  Intcode._less_than,
-            8:  Intcode._equals,
-            9:  Intcode._adjust_base,
+            1: Intcode._add,
+            2: Intcode._mul,
+            3: Intcode._set,
+            4: Intcode._out,
+            5: Intcode._jump_true,
+            6: Intcode._jump_false,
+            7: Intcode._less_than,
+            8: Intcode._equals,
+            9: Intcode._adjust_base,
             99: Intcode._exit
         }[Intcode._get_opcode(instruction)](state, instruction_ptr, *Intcode._get_mode(instruction))
-
