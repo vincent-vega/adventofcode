@@ -3,6 +3,7 @@
 
 from itertools import product
 
+
 class Node:
 
     def __init__(self, name, parent=None):
@@ -12,10 +13,12 @@ class Node:
     def add_parent(self, parent):
         self.parent.add(parent)
 
+
 def part1(nodes, COM):
     def _count(node, step):
         return step + 1 + sum(_count(nodes[n], step + 1) for n in filter(lambda p: p in nodes, node.parent))
     return _count(COM, -1)
+
 
 def part2(nodes, COM):
 
@@ -34,6 +37,7 @@ def part2(nodes, COM):
         if path1[i] == path2[j]:
             return i + j - 2
 
+
 if __name__ == '__main__':
     with open('input.txt') as f:
         orbits = list(map(lambda x: x.split(')'), f.read().splitlines()))
@@ -45,6 +49,5 @@ if __name__ == '__main__':
             nodes[t0] = Node(t0, t1)
         if t1 not in nodes:
             nodes[t1] = Node(t1)
-    print(part1(nodes, nodes['COM'])) # 162816
-    print(part2(nodes, nodes['COM'])) # 304
-
+    print(part1(nodes, nodes['COM']))  # 162816
+    print(part2(nodes, nodes['COM']))  # 304
