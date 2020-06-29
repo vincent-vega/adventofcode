@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+
 def _getfuelmass(mass):
-    return max(mass//3 - 2, 0)
+    return max(mass // 3 - 2, 0)
+
 
 def part1(masslist):
     return sum([ _getfuelmass(m) for m in masslist ])
+
 
 def part2(masslist):
     f = 0
@@ -15,9 +18,9 @@ def part2(masslist):
             f += m
     return f
 
+
 if __name__ == '__main__':
     with open('input.txt') as f:
         masslist = list(map(int, f.read().splitlines()))
-    print(part1(masslist)) # 3408471
-    print(part2(masslist)) # 5109803
-
+    print(part1(masslist))  # 3408471
+    print(part2(masslist))  # 5109803
