@@ -13,7 +13,6 @@ class Intcode_State:
         self.output = deque()
         self.input = deque([] if input_values is None else list(input_values))
         self.input_req = False
-        self.relative_base = 0
 
     def __repr__(self):
         return f'> exit: {self.exit}\n> output: {self.output}\n> input_req: {self.input_req}\n> input: {self.input}'
