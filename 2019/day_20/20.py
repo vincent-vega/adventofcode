@@ -3,6 +3,7 @@
 
 from collections import defaultdict, deque, namedtuple
 
+
 def part1(M: dict) -> int:
     Q = deque()
     visited = set()
@@ -15,7 +16,8 @@ def part1(M: dict) -> int:
             return cur.steps
         for c in [ a for a in _get_adjacent(cur.pos, M) if a not in visited ]:
             Q.append(State(c, cur.steps + 1))
-    return -1 # Not found
+    return -1  # Not found
+
 
 def _get_adjacent(coord: (int, int), M: dict) -> list:
     res = []
@@ -24,6 +26,7 @@ def _get_adjacent(coord: (int, int), M: dict) -> list:
         res.append(M[coord])
     x, y = coord
     return res + [ (x + i, y) for i in [ -1, 1 ] if M[(x + i, y)] is not None ] + [ (x, y + i) for i in [ -1, 1 ] if M[(x, y + i)] is not None ]
+
 
 def part2(M: dict) -> int:
     Q = deque()
@@ -41,7 +44,8 @@ def part2(M: dict) -> int:
         adjacents = _get_adjacent2(cur.pos, M, (max_x, max_y), cur.level)
         for l, p in [ (lev, pos) for lev, pos in adjacents if (lev, pos) not in visited ]:
             Q.append(State(p, cur.steps + 1, l))
-    return -1 # Not found
+    return -1  # Not found
+
 
 def _get_adjacent2(coord: (int, int), M: dict, max_size: (int, int), cur_lev: int) -> list:
     res = []
@@ -52,19 +56,17 @@ def _get_adjacent2(coord: (int, int), M: dict, max_size: (int, int), cur_lev: in
     x, y = coord
     return res + [ (cur_lev, (x + i, y)) for i in [ -1, 1 ] if M[(x + i, y)] is not None ] + [ (cur_lev, (x, y + i)) for i in [ -1, 1 ] if M[(x, y + i)] is not None ]
 
+
 def _is_outer_gate(gate: (int, int), max_size: (int, int)) -> bool:
     max_x, max_y = max_size
     gate_x, gate_y = gate
     return gate_x == 2 or gate_x == max_x or gate_y == 2 or gate_y == max_y
 
-def _get_next_lev(gate: (int, int), max_size: (int, int), cur_lev: int) -> int:
-    gate_x, gate_y = gate
-    max_x, max_y = max_size
-    return (cur_lev - 1) if _is_outer_gate(gate, max_size) else (cur_lev + 1)
 
-def _get_h_adjacent(coord: (int, int)) -> list:
+def _get_h_adjacent(coord: (int, int)) -> tuple:
     x, y = coord
     return (x - 1, y), (x + 1, y)
+
 
 def _parse(line: str, y: int, M: dict, v_gates_x: dict):
     for x in range(len(line)):
@@ -86,8 +88,8 @@ def _parse(line: str, y: int, M: dict, v_gates_x: dict):
             else:
                 if x in v_gates_x.keys():
                     if M[(x, y - 2)] == '.':
-                       M[(x, y - 2)] = v_gates_x[x][0] + line[x]
-                       del v_gates_x[x]
+                        M[(x, y - 2)] = v_gates_x[x][0] + line[x]
+                        del v_gates_x[x]
                     else:
                         v_gates_x[x].append(line[x])
                 else:
@@ -97,13 +99,15 @@ def _parse(line: str, y: int, M: dict, v_gates_x: dict):
                         # first vertical gate letter
                         v_gates_x[x] = [ line[x] ]
 
+
 def _connect_gates(M: dict):
-    gates = [ (k, v) for k, v in M.items() if v != None and v != '.' ]
+    gates = [ (k, v) for k, v in M.items() if v is not None and v != '.' ]
     for pos, name in gates:
         couple = [ p for p, g in gates if g == name ]
         if len(couple) == 2:
-            g1, g2 =  couple
+            g1, g2 = couple
             M[pos] = g1 if g1 != pos else g2
+
 
 if __name__ == '__main__':
     maze = defaultdict(lambda: None)
@@ -113,6 +117,5 @@ if __name__ == '__main__':
         for y in range(len(lines)):
             _parse(lines[y], y, maze, flags)
         _connect_gates(maze)
-    print(part1(maze)) # 628
-    print(part2(maze)) # 7506
-
+    print(part1(maze))  # 628
+    print(part2(maze))  # 7506
