@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from collections import defaultdict
 from intcode import Intcode, Intcode_State
 
 
@@ -27,30 +28,22 @@ def _run(values: list, current_color: int) -> dict:
     BLACK = 0  # WHITE = 1
     current_position = (0, 0)
     current_direction = '^'
-    outputs = [ None, '^' ]
-    output_idx = 0
-
-    def _get_new_col(out: list) -> str:
-        return out[0]
-
-    def _get_new_oper(out: list) -> str:
-        return out[1]
-
-    panels = { current_position: current_color }
+    is_color_output = True
+    panels = defaultdict(lambda: BLACK)
     state = Intcode_State(values, [ current_color ])
     while not state.exit:
         Intcode.run(state)
         if state.output:
-            outputs[output_idx] = state.output.pop()
-            if output_idx == 0:
+            out = state.output.pop()
+            if is_color_output:
                 # color output
-                panels[current_position] = _get_new_col(outputs)
+                panels[current_position] = out
             else:
                 # direction output
-                current_position, current_direction = _rotate(current_position, current_direction, _get_new_oper(outputs))
+                current_position, current_direction = _rotate(current_position, current_direction, out)
                 if current_position not in panels:
                     panels[current_position] = BLACK
-            output_idx = (output_idx + 1) % len(outputs)
+            is_color_output = not is_color_output
         if state.input_req:
             state.input.append(panels[current_position])
     return panels
