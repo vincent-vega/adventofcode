@@ -24,13 +24,13 @@ def _rotate(current_coord: (int, int), current_dir: str, operation: int) -> ((in
     return (current_coord[0] + x_offs, current_coord[1] + y_offs), new_dir
 
 
-def _run(values: list, current_color: int) -> dict:
+def _run(program: list, current_color: int) -> dict:
     BLACK = 0  # WHITE = 1
     current_position = (0, 0)
     current_direction = '^'
     is_color_output = True
     panels = defaultdict(lambda: BLACK)
-    state = Intcode_State(values, [ current_color ])
+    state = Intcode_State(program, [ current_color ])
     while not state.exit:
         Intcode.run(state)
         if state.output:
@@ -54,12 +54,12 @@ def _draw(c: int) -> str:
     return '#' if c == WHITE else ' '
 
 
-def part1(values: list) -> int:
-    return len(_run(values, 0))
+def part1(program: list) -> int:
+    return len(_run(program, 0))
 
 
-def part2(values: list) -> str:
-    panels = _run(values, 1)
+def part2(program: list) -> str:
+    panels = _run(program, 1)
     max_Y = max(panels.keys(), key=lambda k: k[1])[1]
     min_X = min(panels.keys(), key=lambda k: k[0])[0]
     s = ''
