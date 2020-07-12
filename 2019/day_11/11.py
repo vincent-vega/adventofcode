@@ -50,8 +50,8 @@ def _run(values: list, current_color: int) -> dict:
 
 
 def _draw(c: int) -> str:
-    BLACK = 0
-    return ' ' if c == BLACK else '#'
+    WHITE = 1
+    return '#' if c == WHITE else ' '
 
 
 def part1(values: list) -> int:
