@@ -102,10 +102,12 @@ def _run_op(state: dict) -> dict:
         99: _exit
     }[_get_opcode(instruction)](state, instruction_ptr, *_get_mode(instruction))
 
+
 def _run(state: dict) -> list:
     while not state['exit'] and not state['input_req']:
         state = _run_op(state)
     return state
+
 
 def part1(values: list) -> int:
     state = {
@@ -120,6 +122,7 @@ def part1(values: list) -> int:
     out = _run(state)['output']
     return sum([ 1 if out[i] == 2 else 0 for i in range(2, len(out), 3) ])
 
+
 def _pixel(n: int) -> str:
     return {
         0: ' ',
@@ -129,6 +132,7 @@ def _pixel(n: int) -> str:
         4: 'O'
     }[n]
 
+
 def _screenshot(out: list) -> str:
     screen = ''
     for i in range(0, len(out), 3):
@@ -136,22 +140,25 @@ def _screenshot(out: list) -> str:
             screen += '\n'
         tile = _pixel(out[i + 2])
         screen += tile
-    #system('clear')
+    system('clear')
     print(screen)
 
+
 def _track_paddle(out: list, last_x: int) -> (int, int):
-    o = [ t for t in  [ out[i:i + 3] for i in range(0, len(out), 3) ] if t[2] == 3 ]
+    o = [ t for t in [ out[i:i + 3] for i in range(0, len(out), 3) ] if t[2] == 3 ]
     if len(o) > 0:
         ball_x, ball_y, _ = o[0]
         return ball_x, ball_y
     return last_x, None
 
+
 def _track_ball(out: list, last_x: int) -> (int, int):
-    o = [ t for t in  [ out[i:i + 3] for i in range(0, len(out), 3) ] if t[2] == 4 ]
+    o = [ t for t in [ out[i:i + 3] for i in range(0, len(out), 3) ] if t[2] == 4 ]
     if len(o) > 0:
         ball_x, ball_y, _ = o[0]
         return ball_x, ball_y
     return last_x, None
+
 
 def _refresh(out: list, diff: list) -> list:
     score = None
@@ -160,18 +167,20 @@ def _refresh(out: list, diff: list) -> list:
         if x == -1 and y == 0:
             score = n
             continue
-        out[3*(37*y + x) + 2] = n
+        out[3 * (37 * y + x) + 2] = n
     return score
+
 
 def _joystick(ball: list, paddle: list) -> int:
     if ball[-1] > ball[-2]:
         return 1 if ball[-1] > paddle[-1] else 0
-    elif  ball[-1] == ball[-2]:
+    elif ball[-1] == ball[-2]:
         return 1 if ball[-1] > paddle[-1] else 0 if ball[-1] == paddle[-1] else -1
     elif ball[-1] < ball[-2]:
         return 1 if ball[-1] > paddle[-1] else 0
 
-def part2(values: list) -> int:
+
+def part2(values: list, display: bool=False) -> int:
     state = {
         'values': [ 2 ] + list(values)[1:],
         'instruction_ptr': 0,
@@ -184,30 +193,34 @@ def part2(values: list) -> int:
     score = 0
     state = _run(state)
     screen = state['output']
-    #_screenshot(screen)
+    if display:
+        _screenshot(screen)
     state['output'] = []
     ball = [_track_ball(screen, 0)[0] ]
     paddle = [ _track_paddle(screen, 0)[0] ]
     while not state['exit']:
-        #sleep(0.001)
+        if display:
+            sleep(0.001)
         ball.append(_track_ball(screen, ball[-1])[0])
         paddle.append(_track_paddle(screen, paddle[-1])[0])
         if state['input_req']:
             state['input_req'] = False
             state['input'].append(_joystick(ball, paddle))
         state = _run_op(state)
-        if len(state['output'])%3 == 0:
+        if len(state['output']) % 3 == 0:
             s = _refresh(screen, state['output'])
             if s is not None:
                 score = s
+            if display:
+                _screenshot(screen)
             state['output'] = []
-            #_screenshot(screen)
-        #print('score >>>', score)
+        if display:
+            print('Score:', score)
     return score
+
 
 if __name__ == '__main__':
     with open('input.txt') as f:
         values = list(map(int, f.read().split(',')))
-    #print(part1(values)) # 286
-    print(part2(values)) #
-
+    print(part1(values))  # 286
+    print(part2(values))  # 14538
