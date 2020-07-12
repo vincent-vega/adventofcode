@@ -20,6 +20,7 @@ The image you received is ``25`` pixels wide and ``6`` pixels tall.
 
 To make sure the image wasn't corrupted during transmission, the Elves would like you to find the layer that contains the fewest ``0`` digits. On that layer, **what is the number of ``1`` digits multiplied by the number of ``2`` digits?**
 
+
 ### - - - Part Two - - -
 
 Now you're ready to decode the image. The image is rendered by stacking the layers and aligning the pixels with the same positions in each layer. The digits indicate the color of the corresponding pixel: ``0`` is black, ``1`` is white, and ``2`` is transparent.

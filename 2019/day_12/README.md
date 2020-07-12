@@ -182,6 +182,7 @@ Every ten steps of simulation for 100 steps produces:
 
 **What is the total energy in the system after simulating the moons given in your scan for ``1000`` steps?**
 
+
 ### - - - Part Two - - -
 
 All this drifting around in space makes you wonder about the nature of the universe. Does history really repeat itself? You're curious whether the moons will ever return to a previous state.

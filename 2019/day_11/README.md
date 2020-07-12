@@ -63,6 +63,7 @@ Before you deploy the robot, you should probably have an estimate of the area it
 
 Build a new emergency hull painting robot and run the Intcode program on it. **How many panels does it paint at least once?**
 
+
 ### - - - Part Two - - -
 
 You're not sure what it's trying to paint, but it's definitely not a **registration identifier**. The Space Police are getting impatient.

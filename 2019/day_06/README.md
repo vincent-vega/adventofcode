@@ -53,6 +53,7 @@ The total number of direct and indirect orbits in this example is **``42``**.
 
 **What is the total number of direct and indirect orbits in your map data?**
 
+
 ### - - - Part Two - - -
 Now, you just need to figure out how many orbital transfers you (``YOU``) need to take to get to Santa (``SAN``).
 
