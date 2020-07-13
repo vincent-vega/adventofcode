@@ -3,21 +3,18 @@
 
 
 def part1(signal: str) -> str:
+    pattern = [ _pattern(pos, len(signal)) for pos in range(1, len(signal) + 1) ]
     for n in range(100):
-        signal = _calc_phase(signal)
+        signal = _calc_phase(signal, pattern)
     return signal[:8]
 
 
-def _calc_phase(signal: str) -> str:
-    result = ''
+def _calc_phase(signal: str, patterns: list) -> str:
     size = len(signal)
-    for pos in range(1, size + 1):
-        pattern = _pattern(pos, size)
-        result += str(sum([ int(signal[i]) * int(pattern[i]) for i in range(size) ]))[-1]
-    return result
+    return ''.join([ str(sum([ int(signal[i]) * int(patterns[pos][i]) for i in range(size) ]))[-1] for pos in range(size) ])
 
 
-def _pattern(position: int, size: int) -> str:
+def _pattern(position: int, size: int) -> list:
     base_pattern = [0, 1, 0, -1]
     pattern = []
     for p in base_pattern:
