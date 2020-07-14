@@ -2,16 +2,15 @@
 # -*- coding: utf-8 -*-
 
 
-def part1(signal: str) -> str:
-    pattern = [ _pattern(pos, len(signal)) for pos in range(1, len(signal) + 1) ]
+def part1(signal: list) -> str:
+    patterns = [ _pattern(pos, len(signal)) for pos in range(1, len(signal) + 1) ]
     for n in range(100):
-        signal = _calc_phase(signal, pattern)
-    return signal[:8]
+        signal = _fft(signal, patterns)
+    return ''.join(map(str, signal[:8]))
 
 
-def _calc_phase(signal: str, patterns: list) -> str:
-    size = len(signal)
-    return ''.join([ str(sum([ int(signal[i]) * int(patterns[pos][i]) for i in range(size) ]))[-1] for pos in range(size) ])
+def _fft(signal: list, patterns: list) -> str:
+    return [ abs(sum([ s * p for (s, p) in zip(signal, pattern) ])) % 10 for pattern in patterns ]
 
 
 def _pattern(position: int, size: int) -> list:
@@ -24,12 +23,12 @@ def _pattern(position: int, size: int) -> list:
     return pattern[1:size + 1]
 
 
-def part2(values):
+def part2(signal: list):
     pass
 
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        signal = f.read().strip()
+        signal = list(map(int, f.read().strip()))
     print(part1(signal))  # 45834272
-    print(part2(signal))  #
+    print(part2(signal * 10**5))  #
