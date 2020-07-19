@@ -15,7 +15,7 @@ def part2(signal: list, phase_num: int, offset_size: int) -> str:
     offset = sum([ signal[exp] * 10**(offset_size - exp - 1) for exp in range(offset_size) ])
     assert offset > int(len(signal) / 2)
     signal = signal[offset:]
-    for _ in range(100):
+    for _ in range(phase_num):
         signal_tmp = []
         accumulator = 0
         for idx in range(len(signal) - 1, -1, -1):
