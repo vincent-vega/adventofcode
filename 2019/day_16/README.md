@@ -73,7 +73,7 @@ Here are the first eight digits of the final output list after 100 phases for so
 After **100** phases of FFT, **what are the first eight digits in the final output list?**
 
 
---- Part Two ---
+### - - - Part Two - - -
 
 Now that your FFT is working, you can decode the **real signal**.
 
