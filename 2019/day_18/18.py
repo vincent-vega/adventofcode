@@ -13,8 +13,8 @@ def _get_directions(coord: (int, int)) -> tuple:
 def part1(M: dict) -> int:
     keys = [ k for k in M.keys() if re.match(r'[a-z]', M[k]) ]
     start = next(filter(lambda k: M[k] == '@', M.keys()))
-    KeyFinder = namedtuple('KeyFinder', 'coord keys path_current')
-    Q = deque([ KeyFinder(start, set(), []) ])
+    KeyFinder = namedtuple('KeyFinder', 'coord keys steps')
+    Q = deque([ KeyFinder(start, set(), [ 0 ]) ])
     history = set()
     while Q:
         cur = Q.popleft()
@@ -22,18 +22,18 @@ def part1(M: dict) -> int:
         if state in history:
             continue
         history.add(state)
-        cur.path_current.append(cur.coord)
+        cur.steps[0] = cur.steps[0] + 1
         curr_char = M[cur.coord]
         if re.match(r'[a-z]', curr_char) and curr_char not in cur.keys:
             cur.keys.add(curr_char)
             if len(cur.keys) == len(keys):
-                return len(cur.path_current) - 1
+                return cur.steps[0] - 1
         elif re.match(r'[A-Z]', curr_char):
             key_name = chr(ord(curr_char) + 32)
             if key_name not in cur.keys:
                 continue
         for child in filter(lambda d: d in M.keys(), _get_directions(cur.coord)):
-            Q.append(KeyFinder(child, set(cur.keys), list(cur.path_current)))
+            Q.append(KeyFinder(child, set(cur.keys), list(cur.steps)))
 
 
 def _parse(values: list) -> dict:
