@@ -68,13 +68,6 @@ def _find_valid_y(program: list, slope: float, start_y: int, step: int, ship_siz
     return y
 
 
-def _print(program: list, size: int):
-    def _draw(num: int) -> str:
-        return '#' if num == 1 else ' '
-    for y in range(size):
-        print(*[ _draw(_run(program, [ x, y ])) for x in range(size) ], sep='')
-
-
 if __name__ == '__main__':
     with open('input.txt') as f:
         program = list(map(int, f.read().split(',')))
