@@ -22,14 +22,16 @@ For example, consider the program ``1002,4,3,4,33``.
 
 The first instruction, ``1002,4,3,4``, is a **multiply** instruction - the rightmost two digits of the first value, ``02``, indicate opcode ``2``, multiplication. Then, going right to left, the parameter modes are ``0`` (hundreds digit), ``1`` (thousands digit), and ``0`` (ten-thousands digit, not present and therefore zero):
 
-``ABCDE``  
-`` 1002``  
-  
-``DE - two-digit opcode,      02 == opcode 2``  
-`` C - mode of 1st parameter,  0 == position mode``  
-`` B - mode of 2nd parameter,  1 == immediate mode``  
-`` A - mode of 3rd parameter,  0 == position mode,``  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;``omitted due to being a leading zero``  
+<pre>
+ABCDE
+ 1002
+
+DE - two-digit opcode,      02 == opcode 2
+ C - mode of 1st parameter,  0 == position mode
+ B - mode of 2nd parameter,  1 == immediate mode
+ A - mode of 3rd parameter,  0 == position mode,
+                                  omitted due to being a leading zero
+</pre>
 
 This instruction multiplies its first two parameters. The first parameter, ``4`` in position mode, works like it did before - its value is the value stored at address ``4`` (``33``). The second parameter, ``3`` in immediate mode, simply has value ``3``. The result of this operation, ``33 * 3 = 99``, is written according to the third parameter, ``4`` in position mode, which also works like it did before - ``99`` is written to address ``4``.
 
@@ -50,6 +52,7 @@ After providing ``1`` to the only input instruction and passing all the tests, *
 
 
 ### - - - Part Two - - -
+
 The air conditioner comes online! Its cold air feels good for a while, but then the TEST alarms start to go off. Since the air conditioner can't vent its heat anywhere but back into the spacecraft, it's actually making the air inside the ship **warmer**.
 
 Instead, you'll need to use the TEST to extend the [thermal radiators](https://en.wikipedia.org/wiki/Spacecraft_thermal_control). Fortunately, the diagnostic program (your puzzle input) is already equipped for this. Unfortunately, your Intcode computer is not.
@@ -79,9 +82,11 @@ Here are some jump tests that take an input, then output 0 if the input was zero
 
 Here's a larger example:
 
-``3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,``  
-``1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,``  
-``999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99``  
+<pre>
+3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
+1106,0,36,98,0,0,1002,21,125,20,4,20,1105,1,46,104,
+999,1105,1,46,1101,1000,1,20,4,20,1105,1,46,98,99
+</pre>
 
 The above example program uses an input instruction to ask for a single number. The program will then output ``999`` if the input value is below ``8``, output ``1000`` if the input value is equal to ``8``, or output ``1001`` if the input value is greater than ``8``.
 

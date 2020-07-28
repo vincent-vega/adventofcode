@@ -17,7 +17,7 @@ public class Day02
             o[o[opPos + 3]] = o[o[opPos + 1]]*o[o[opPos + 2]];
             break;
         default:
-            throw new IllegalArgumentException(String.format("Unknown operation code", o[opPos]));
+            throw new IllegalArgumentException(String.format("Unknown operation code: %d", o[opPos]));
         }
     }
 
