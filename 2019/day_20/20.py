@@ -2,59 +2,60 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict, deque, namedtuple
+from copy import deepcopy
 
 
 def part1(M: dict) -> int:
     Q = deque()
     visited = set()
-    State = namedtuple('State', [ 'pos', 'steps' ])
-    Q.append(State(next(filter(lambda k: M[k] == 'AA', M)), 0))
+    Finder = namedtuple('Finder', [ 'coord', 'steps' ])
+    Q.append(Finder(next(filter(lambda k: M[k] == 'AA', M)), 0))
     while Q:
         cur = Q.popleft()
-        visited.add(cur.pos)
-        if M[cur.pos] == 'ZZ':
+        visited.add(cur.coord)
+        if M[cur.coord] == 'ZZ':
             return cur.steps
-        for c in [ a for a in _get_adjacent(cur.pos, M) if a not in visited ]:
-            Q.append(State(c, cur.steps + 1))
+        for x, y in [ a for a in _get_adjacent(cur.coord, M) if a not in visited ]:
+            Q.append(Finder((x, y), cur.steps + 1))
     return -1  # Not found
 
 
 def _get_adjacent(coord: (int, int), M: dict) -> list:
-    res = []
+    x, y = coord
+    adj = [ (x + dx, y + dy) for dx, dy in [ (-1, 0), (1, 0), (0, -1), (0, 1) ] if M[(x + dx, y + dy)] is not None ]
     if isinstance(M[coord], tuple):
         # gate
-        res.append(M[coord])
-    x, y = coord
-    return res + [ (x + i, y) for i in [ -1, 1 ] if M[(x + i, y)] is not None ] + [ (x, y + i) for i in [ -1, 1 ] if M[(x, y + i)] is not None ]
+        adj.append(M[coord])
+    return adj
 
 
 def part2(M: dict) -> int:
     Q = deque()
     visited = set()
-    State = namedtuple('State', [ 'pos', 'steps', 'level' ])
-    Q.append(State(next(filter(lambda k: M[k] == 'AA', M)), 0, 0))
-    max_x = max(M.keys(), key=lambda k: k[0])[0]
-    max_y = max(M.keys(), key=lambda k: k[1])[1]
+    Finder = namedtuple('Finder', [ 'level', 'coord', 'steps' ])
+    Q.append(Finder(0, next(filter(lambda k: M[k] == 'AA', M)), 0))
+    max_x, _ = max(M.keys(), key=lambda k: k[0])
+    _, max_y = max(M.keys(), key=lambda k: k[1])
     while Q:
         cur = Q.popleft()
-        visited.add((cur.level, cur.pos))
+        visited.add((cur.level, *cur.coord))
         assert cur.level > -1
-        if M[cur.pos] == 'ZZ' and cur.level == 0:
+        if M[cur.coord] == 'ZZ' and cur.level == 0:
             return cur.steps
-        adjacents = _get_adjacent2(cur.pos, M, (max_x, max_y), cur.level)
-        for l, p in [ (lev, pos) for lev, pos in adjacents if (lev, pos) not in visited ]:
-            Q.append(State(p, cur.steps + 1, l))
+        adjacents = _get_adjacent2(cur.coord, M, (max_x, max_y), cur.level)
+        for lev, x, y in [ (lev, x, y) for lev, x, y in adjacents if (lev, x, y) not in visited ]:
+            Q.append(Finder(lev, (x, y), cur.steps + 1))
     return -1  # Not found
 
 
 def _get_adjacent2(coord: (int, int), M: dict, max_size: (int, int), cur_lev: int) -> list:
-    res = []
+    x, y = coord
+    adj = [ (cur_lev, x + dx, y + dy) for dx, dy in [ (-1, 0), (1, 0), (0, -1), (0, 1) ] if M[(x + dx, y + dy)] is not None ]
     if isinstance(M[coord], tuple):
         # gate
         if not _is_outer_gate(coord, max_size) or cur_lev > 0:
-            res.append((cur_lev + (-1 if _is_outer_gate(coord, max_size) else 1), M[coord]))
-    x, y = coord
-    return res + [ (cur_lev, (x + i, y)) for i in [ -1, 1 ] if M[(x + i, y)] is not None ] + [ (cur_lev, (x, y + i)) for i in [ -1, 1 ] if M[(x, y + i)] is not None ]
+            adj.append((cur_lev + (-1 if _is_outer_gate(coord, max_size) else 1), *M[coord]))
+    return adj
 
 
 def _is_outer_gate(gate: (int, int), max_size: (int, int)) -> bool:
@@ -102,11 +103,11 @@ def _parse(line: str, y: int, M: dict, v_gates_x: dict):
 
 def _connect_gates(M: dict):
     gates = [ (k, v) for k, v in M.items() if v is not None and v != '.' ]
-    for pos, name in gates:
+    for coord, name in gates:
         couple = [ p for p, g in gates if g == name ]
         if len(couple) == 2:
             g1, g2 = couple
-            M[pos] = g1 if g1 != pos else g2
+            M[coord] = g1 if g1 != coord else g2
 
 
 if __name__ == '__main__':
@@ -117,5 +118,5 @@ if __name__ == '__main__':
         for y in range(len(lines)):
             _parse(lines[y], y, maze, flags)
         _connect_gates(maze)
-    print(part1(maze))  # 628
+    print(part1(deepcopy(maze)))  # 628
     print(part2(maze))  # 7506
