@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 from itertools import product
@@ -6,21 +6,21 @@ from itertools import product
 
 class Node:
 
-    def __init__(self, name, parent=None):
+    def __init__(self, name: str, parent: str=None):
         self.name = name
         self.parent = set() if parent is None else set([ parent ])
 
-    def add_parent(self, parent):
+    def add_parent(self, parent: str):
         self.parent.add(parent)
 
 
-def part1(nodes, COM):
+def part1(nodes: dict, COM: Node) -> int:
     def _count(node, step):
         return step + 1 + sum(_count(nodes[n], step + 1) for n in filter(lambda p: p in nodes, node.parent))
     return _count(COM, -1)
 
 
-def part2(nodes, COM):
+def part2(nodes: dict, COM: Node) -> int:
 
     def _get_paths(node, cur_path):
         cur_path.append(node.name)
