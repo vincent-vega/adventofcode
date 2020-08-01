@@ -6,8 +6,7 @@ from intcode import Intcode, Intcode_State
 
 
 def _rotate(current_coord: (int, int), current_dir: str, operation: int) -> ((int, int), str):
-    LEFT_90 = 0
-    # RIGHT_90 = 1
+    LEFT_90 = 0  # RIGHT_90 = 1
     x_offs = y_offs = 0
     if current_dir == '^':
         new_dir = '<' if operation == LEFT_90 else '>'

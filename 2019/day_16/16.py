@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from doctest import testmod
 from typing import Generator
-import doctest
 
 
 def part1(signal: list, phase_num: int) -> str:
@@ -63,7 +63,7 @@ def _pattern(position: int, size: int) -> Generator[int, None, None]:
 
 
 if __name__ == '__main__':
-    doctest.testmod()
+    testmod()
     with open('input.txt') as f:
         signal = list(map(int, f.read().strip()))
     print(part1(signal, 100))  # 45834272
