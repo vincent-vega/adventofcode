@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from collections import defaultdict, deque, namedtuple
-from copy import deepcopy
+from collections import deque, namedtuple
 
 
 def part1(M: dict) -> int:
@@ -22,7 +21,7 @@ def part1(M: dict) -> int:
 
 def _get_adjacent(coord: (int, int), M: dict) -> list:
     x, y = coord
-    adj = [ (x + dx, y + dy) for dx, dy in [ (-1, 0), (1, 0), (0, -1), (0, 1) ] if M[(x + dx, y + dy)] is not None ]
+    adj = [ (x + dx, y + dy) for dx, dy in [ (-1, 0), (1, 0), (0, -1), (0, 1) ] if M.get((x + dx, y + dy)) is not None ]
     if isinstance(M[coord], tuple):
         # gate
         adj.append(M[coord])
@@ -50,7 +49,7 @@ def part2(M: dict) -> int:
 
 def _get_adjacent2(coord: (int, int), M: dict, max_size: (int, int), cur_lev: int) -> list:
     x, y = coord
-    adj = [ (cur_lev, x + dx, y + dy) for dx, dy in [ (-1, 0), (1, 0), (0, -1), (0, 1) ] if M[(x + dx, y + dy)] is not None ]
+    adj = [ (cur_lev, x + dx, y + dy) for dx, dy in [ (-1, 0), (1, 0), (0, -1), (0, 1) ] if M.get((x + dx, y + dy)) is not None ]
     if isinstance(M[coord], tuple):
         # gate
         if not _is_outer_gate(coord, max_size) or cur_lev > 0:
@@ -88,7 +87,7 @@ def _parse(line: str, y: int, M: dict, v_gates_x: dict):
                     break
             else:
                 if x in v_gates_x.keys():
-                    if M[(x, y - 2)] == '.':
+                    if M.get((x, y - 2)) == '.':
                         M[(x, y - 2)] = v_gates_x[x][0] + line[x]
                         del v_gates_x[x]
                     else:
@@ -111,12 +110,12 @@ def _connect_gates(M: dict):
 
 
 if __name__ == '__main__':
-    maze = defaultdict(lambda: None)
+    maze = {}
     with open('input.txt') as f:
         lines = f.read().splitlines()
         flags = {}
         for y in range(len(lines)):
             _parse(lines[y], y, maze, flags)
         _connect_gates(maze)
-    print(part1(deepcopy(maze)))  # 628
+    print(part1(maze))  # 628
     print(part2(maze))  # 7506
