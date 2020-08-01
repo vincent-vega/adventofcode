@@ -37,9 +37,7 @@ def part2(program: list) -> int:
     state = Intcode_State(program, [ ord(c) for c in tot ])
     while not state.exit:
         Intcode.run(state)
-        if state.output:
-            align = state.output.pop()
-    return align
+    return state.output.pop()
 
 
 if __name__ == '__main__':
