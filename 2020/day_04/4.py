@@ -4,6 +4,10 @@
 import re
 
 
+def _passport(data: list) -> dict:
+    return { k: v for k, v in [ d.split(':') for l in data.split('\n') for d in l.split(' ') if ':' in d ] }
+
+
 def part1(passports: list) -> int:
     return sum([ 1 for p in passports if not { 'byr', 'iyr', 'eyr', 'hgt', 'hcl', 'ecl', 'pid' } - p.keys() ])
 
@@ -36,18 +40,7 @@ def part2(passports: list) -> int:
 
 
 if __name__ == '__main__':
-    P = []
     with open('input.txt') as f:
-        passport = {}
-        for line in f:
-            for attr in line.strip().split(' '):
-                if not attr:
-                    P.append(passport)
-                    passport = {}
-                    continue
-                key, value = attr.split(':', 1)
-                passport[key] = value
-        P.append(passport)
-
-    print(part1(P))  # 235
-    print(part2(P))  # 194
+        passports = [ _passport(p) for p in f.read().split('\n\n') ]
+    print(part1(passports))  # 235
+    print(part2(passports))  # 194
