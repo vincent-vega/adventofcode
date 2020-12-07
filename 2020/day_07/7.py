@@ -36,8 +36,7 @@ def part2(rules: dict, what: str) -> int:
     while target:
         q, w = target.pop()
         count += int(q)
-        if rules[w] is not None:
-            target.extend([ (qq, ww) for _ in range(int(q)) for qq, ww in rules[w] ])
+        target.extend([ (qq, ww) for _ in range(int(q)) for qq, ww in rules[w] ])
     return count
 
 
@@ -56,7 +55,7 @@ if __name__ == '__main__':
         for l in f.read().splitlines():
             container, content = l.split(' bags contain ')
             if content == 'no other bags.':
-                content = None
+                content = []
             else:
                 content = content[:-1].split(', ')
                 content = [ tuple(re.sub(' bags?', '', c).split(' ', 1)) for c in content ]
