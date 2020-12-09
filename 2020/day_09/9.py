@@ -19,11 +19,12 @@ def part1(values: list, preamble_len: int) -> int:
 
 def part2(values: list, target: int) -> int:
     for i in range(0, len(values) - 1):
+        total = values[i]
         for j in range(i + 2, len(values)):
-            s = sum(values[i:j])
-            if s > target:
+            total += values[j - 1]
+            if total > target:
                 break
-            elif s == target:
+            elif total == target:
                 return min(values[i:j]) + max(values[i:j])
     raise Exception('Not found')
 
