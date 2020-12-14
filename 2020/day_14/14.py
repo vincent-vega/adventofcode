@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from functools import lru_cache
 from itertools import combinations
 import re
 
 
 def _binstr(n: int, padding: int=36) -> str:
-    return bin(n)[2:].zfill(padding)
+    return f'{n:b}'.zfill(padding)
 
 
 def _bitmask(mask: str, value: int) -> int:
@@ -14,12 +15,16 @@ def _bitmask(mask: str, value: int) -> int:
     return int(''.join([ bin_val[i] if m == 'X' else mask[i] for i, m in enumerate(mask) ]), 2)
 
 
-def _floating(mask: str, address: str) -> list:
-    base_address = int(''.join([ address[i] if m == '0' else '1' if m == '1' else '0' for i, m in enumerate(mask) ]), 2)
-    X_idx = [ m.start() for m in re.finditer('X', mask) ]
+@lru_cache(maxsize=256)
+def _offsets(mask: str):
+    X_idx = ( m.start() for m in re.finditer('X', mask) )
     powers = [ 2**(35 - x) for x in X_idx ]
-    offsets = [ 0 ] + [ sum(cc) for i in range(1, len(powers) + 1) for cc in combinations(powers, i) ]
-    return [ base_address + n for n in offsets ]
+    return [ 0 ] + [ sum(cc) for i in range(1, len(powers) + 1) for cc in combinations(powers, i) ]
+
+
+def _mem_addr_dec(mask: str, address: str) -> list:
+    base_address = int(''.join([ address[i] if m == '0' else '1' if m == '1' else '0' for i, m in enumerate(mask) ]), 2)
+    return [ base_address + o for o in _offsets(mask) ]
 
 
 def part1(commands: list) -> int:
@@ -41,7 +46,7 @@ def part2(commands: list) -> int:
         else:
             value = int(value)
             address = int(dest[4:len(dest) - 1])
-            for address in _floating(mask, _binstr(address)):
+            for address in _mem_addr_dec(mask, _binstr(address)):
                 mem[address] = value
     return sum(mem.values())
 
