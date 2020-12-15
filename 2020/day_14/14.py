@@ -16,7 +16,7 @@ def _bitmask(mask: str, value: int) -> int:
 
 
 @lru_cache(maxsize=256)
-def _offsets(mask: str):
+def _offsets(mask: str) -> list:
     X_idx = ( m.start() for m in re.finditer('X', mask) )
     powers = [ 2**(35 - x) for x in X_idx ]
     return [ 0 ] + [ sum(cc) for i in range(1, len(powers) + 1) for cc in combinations(powers, i) ]
