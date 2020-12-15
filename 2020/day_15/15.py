@@ -15,11 +15,11 @@ def _play(values: list, rounds: int) -> int:
     return last
 
 
-def part1(values:list) -> int:
+def part1(values: list) -> int:
     return _play(values, 2020)
 
 
-def part2(values:list) -> int:
+def part2(values: list) -> int:
     return _play(values, 30000000)
 
 

@@ -37,7 +37,7 @@ Here are a few more examples:
 * Given the starting numbers ``3,2,1``, the ``2020``th number spoken is ``438``.
 * Given the starting numbers ``3,1,2``, the ``2020``th number spoken is ``1836``.
 
-Given your starting numbers, **what will be the 2020th number spoken?**
+Given your starting numbers, **what will be the ``2020``th number spoken?**
 
 
 ### --- Part Two ---
