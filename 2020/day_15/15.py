@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+
 def _play(values: list, rounds: int) -> int:
     old, new = {}, { v: i + 1 for i, v in enumerate(values) }
     last = values[-1]

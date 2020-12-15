@@ -93,7 +93,7 @@ def _adj_from(ferry: dict, coord: (int, int), X: int, Y: int) -> list:
         return True
 
     x, y = coord
-    return [ (delta_x + x, delta_y + y) for delta_y in (-1, 0, 1) for delta_x in (-1, 0, +1) if _valid((x, y), (delta_x, delta_y)) ]
+    return [ (delta_x + x, delta_y + y) for delta_y in (-1, 0, 1) for delta_x in (-1, 0, 1) if _valid((x, y), (delta_x, delta_y)) ]
 
 
 def _adjacent(ferry: dict) -> dict:
