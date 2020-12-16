@@ -40,7 +40,7 @@ Here are a few more examples:
 Given your starting numbers, **what will be the ``2020``th number spoken?**
 
 
-### --- Part Two ---
+### - - - Part Two - - -
 
 Impressed, the Elves issue you a challenge: determine the ``30000000``th number spoken. For example, given the same starting numbers as above:
 
