@@ -38,7 +38,7 @@ def part2(rules: dict, ticket: list, nearby: list) -> int:
         for idx, name in filter(lambda v: len(v[1]) == 1, compatible):
             col_name = name.pop()
             mapping[col_name] = idx
-            compatible = _clean([ (i, c) for i, c in compatible if i != idx ], set([ col_name]))
+            compatible = _clean([ (i, c) for i, c in compatible if i != idx ], set([ col_name ]))
             break
         else:
             raise Exception('Unable to find a solution')
@@ -62,7 +62,7 @@ def _invalid(rules: str, nearby: list) -> list:
     return [ v for n in nearby for v in n if v not in valid ]
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     with open('input.txt') as f:
         rules, ticket, nearby = [ x for x in f.read().split('\n\n') ]
     ticket = list(map(int, ticket[len('your ticket: '):].split(',')))

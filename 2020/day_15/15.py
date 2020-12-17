@@ -24,7 +24,7 @@ def part2(values: list) -> int:
     return _play(values, 30000000)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     with open('input.txt') as f:
         values = list(map(int, f.readline().split(',')))
     print(part1(values))  # 403
