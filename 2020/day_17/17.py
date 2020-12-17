@@ -16,7 +16,7 @@ def _deltas(size: int, cache: dict={}) -> set:
 def _neighbors(coord: tuple, cache: dict={}) -> set:
     if coord in cache:
         return cache[coord]
-    cache[coord] = { tuple( c - d for c, d in zip(coord, delta)) for delta in _deltas(len(coord), cache) }
+    cache[coord] = { tuple(map(lambda c, d: c - d, coord, delta)) for delta in _deltas(len(coord), cache) }
     return cache[coord]
 
 
@@ -32,7 +32,7 @@ def _cycle(cubes: dict, rounds: int=6) -> dict:
             elif not active and neigh == 3:
                 nxt[coord] = True
         cubes = nxt
-    return nxt
+    return cubes
 
 
 if __name__ == '__main__':
