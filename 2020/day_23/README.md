@@ -85,7 +85,7 @@ Your labeling is still correct for the first few cups; after that, the remaining
 
 After discovering where you made the mistake in translating Crab Numbers, you realize the small crab isn't going to do merely 100 moves; the crab is going to do **ten million** (``10000000``) moves!
 
-The crab is going to hide your **stars** - one each - under the **two cups that will end up immediately clockwise of cup ``1``**. You can have them if you predict what the labels on those cups will be when the crab is finished.
+The crab is going to hide your <b><span style="color:gold">stars</span></b> - one each - under the **two cups that will end up immediately clockwise of cup ``1``**. You can have them if you predict what the labels on those cups will be when the crab is finished.
 
 In the above example (``389125467``), this would be ``934001`` and then ``159792``; multiplying these together produces **``149245887792``**.
 
