@@ -4,17 +4,16 @@
 from collections import Counter
 
 
-def _adj(c: (int, int), cache: dict={}) -> set:
-    if c in cache:
-        return cache[c]
-    x, y = c
-    cache[c] = { (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx != dy }
-    return cache[c]
+def _adj(x: int, y: int, cache: dict={}) -> set:
+    if (x, y) in cache:
+        return cache[(x, y)]
+    cache[(x, y)] = { (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx != dy }
+    return cache[(x, y)]
 
 
 def _flip(floor: dict) -> dict:
     nxt = {}
-    adj_freq = Counter([ a for coord in floor for a in _adj(coord) ])
+    adj_freq = Counter([ a for coord in floor for a in _adj(*coord) ])
     for coord, black_cnt in adj_freq.items():
         is_black = floor.get(coord)
         if is_black and (black_cnt == 1 or black_cnt == 2):
