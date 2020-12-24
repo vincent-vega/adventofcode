@@ -4,7 +4,7 @@
 from collections import Counter
 
 
-def _adj(c: (int, int), cache: dict) -> set:
+def _adj(c: (int, int), cache: dict={}) -> set:
     if c in cache:
         return cache[c]
     x, y = c
@@ -12,9 +12,9 @@ def _adj(c: (int, int), cache: dict) -> set:
     return cache[c]
 
 
-def _flip(floor: dict, cache: dict) -> dict:
+def _flip(floor: dict) -> dict:
     nxt = {}
-    adj_freq = Counter([ a for coord in floor for a in _adj(coord, cache) ])
+    adj_freq = Counter([ a for coord in floor for a in _adj(coord) ])
     for coord, black_cnt in adj_freq.items():
         is_black = floor.get(coord)
         if is_black and (black_cnt == 1 or black_cnt == 2):
@@ -49,17 +49,15 @@ def part1(delta: list) -> int:
     return len([ 1 for is_black in _flip_deltas(delta).values() if is_black ])
 
 
-def part2(delta: list, rounds: int=100, cache: dict={}) -> int:
+def part2(delta: list, rounds: int=100) -> int:
     floor = { c: True for c, is_black in _flip_deltas(delta).items() if is_black }
     for _ in range(rounds):
-        floor = _flip(floor, cache)
+        floor = _flip(floor)
     return len(floor)
 
 
 if __name__ == '__main__':
     with open('input.txt') as f:
         delta = [ _parse(line) for line in f.read().splitlines() ]
-    assert part1(delta) == 232
-    assert part2(delta) == 3519
-    # print(part1(delta))  # 232
-    # print(part2(delta))  # 3519
+    print(part1(delta))  # 232
+    print(part2(delta))  # 3519
