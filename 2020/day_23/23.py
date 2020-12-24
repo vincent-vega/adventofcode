@@ -47,7 +47,7 @@ def _final_order(cups: dict) -> int:
     return int(''.join(map(str, ret)))
 
 
-def _fillup(cups: dict, values: int, size: int):
+def _fillup(cups: dict, values: int, size: int) -> dict:
     M = max(cups)
     cur = cups[values[-1]]
     for i in range(M + 1, size + 1):
