@@ -29,6 +29,6 @@ def part2(menu: list) -> str:
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        menu = list(map(lambda t: (set(t[0].split(' ')), set(t[1][:-1].split(', '))), map(lambda l: l.split(' (contains '), f.read().splitlines())))
+        menu = list(map(lambda t: (set(t[0].split()), set(t[1][:-1].split(', '))), map(lambda l: l.split(' (contains '), f.read().splitlines())))
     print(part1(menu))  # 1685
     print(part2(menu))  # ntft,nhx,kfxr,xmhsbd,rrjb,xzhxj,chbtp,cqvc

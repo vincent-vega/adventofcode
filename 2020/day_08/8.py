@@ -47,6 +47,6 @@ def part1(code: list) -> int:
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        code = [ Sloc(instr, int(val)) for instr, val in map(lambda l: l.split(' '), f.read().splitlines()) ]
+        code = [ Sloc(instr, int(val)) for instr, val in map(lambda l: l.split(), f.read().splitlines()) ]
     print(part1(code))  # 2051
     print(part2(code))  # 2304

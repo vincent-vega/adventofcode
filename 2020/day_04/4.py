@@ -5,7 +5,7 @@ import re
 
 
 def _passport(data: list) -> dict:
-    return { k: v for k, v in [ d.split(':') for l in data.split('\n') for d in l.split(' ') if ':' in d ] }
+    return { k: v for k, v in [ d.split(':') for l in data.split('\n') for d in l.split() if ':' in d ] }
 
 
 def part1(passports: list) -> int:

@@ -26,6 +26,6 @@ def part2(rules: list) -> int:
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        rules = list(map(lambda r: Rule(*r), [ row.replace(':', '').split(' ') for row in f ]))
+        rules = list(map(lambda r: Rule(*r), [ row.replace(':', '').split() for row in f ]))
     print(part1(rules))  # 655
     print(part2(rules))  # 673

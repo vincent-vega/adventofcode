@@ -51,6 +51,6 @@ def part2(expressions: list):
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        expressions = [ list(map(lambda n: int(n) if re.match('-?\\d+', n) else n, line)) for line in map(lambda l: l.split(' '), f.read().replace('(', '( ').replace(')', ' )').splitlines()) ]
+        expressions = [ list(map(lambda n: int(n) if re.match('-?\\d+', n) else n, line)) for line in map(lambda l: l.split(), f.read().replace('(', '( ').replace(')', ' )').splitlines()) ]
     print(part1(expressions))  # 45283905029161
     print(part2(expressions))  # 216975281211165
