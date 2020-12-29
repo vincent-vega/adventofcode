@@ -5,7 +5,7 @@ from collections import Counter
 from itertools import combinations
 
 
-def _deltas(size: int, cache: dict={}) -> set:
+def _deltas(size: int, cache: dict) -> set:
     if 'deltas' in cache:
         return cache['deltas']
     zero_delta = (0,) * size
@@ -13,7 +13,7 @@ def _deltas(size: int, cache: dict={}) -> set:
     return cache['deltas']
 
 
-def _neighbors(coord: tuple, cache: dict={}) -> set:
+def _neighbors(coord: tuple, cache: dict) -> set:
     if coord in cache:
         return cache[coord]
     cache[coord] = { tuple(map(lambda c, d: c - d, coord, delta)) for delta in _deltas(len(coord), cache) }

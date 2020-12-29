@@ -6,9 +6,9 @@ from collections import Counter
 
 def _adj(x: int, y: int, cache: dict={}) -> set:
     if (x, y) in cache:
-        return cache[(x, y)]
-    cache[(x, y)] = { (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx != dy }
-    return cache[(x, y)]
+        return cache[x, y]
+    cache[x, y] = { (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx != dy }
+    return cache[x, y]
 
 
 def _flip(floor: dict) -> dict:
