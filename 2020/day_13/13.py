@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-def _next(start: int, num: int) -> int:
+def _next(start: int, num: int) -> tuple:
     nxt = start // num * num + num
     while nxt < start:
         nxt += num
