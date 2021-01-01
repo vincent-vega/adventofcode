@@ -23,8 +23,8 @@ def flip_dict_map_Y(d_map: dict) -> dict:
     return { (X - x, y): True for x, y in d_map }
 
 
-def inverted(border: tuple) -> tuple:
-    return tuple(9 - x for x in border[::-1])
+def inverted(border: tuple, X: int=9) -> tuple:
+    return tuple(X - x for x in border[::-1])
 
 
 def flip_X(puzzle: dict, border: dict, tile_num: int, flip_puzzle=False):
