@@ -28,12 +28,9 @@ def _expand(rules: dict) -> dict:
                     # rule with loop
                     dependencies = [ nn for n in rules[cur_rule] for nn in n if cur_rule not in n ]
                     chunks = { x for x in reduce(_merge, [ expanded[n] for n in dependencies ]) }
-                    if len(dependencies) == 1:
-                        loop_pattern = [ f'(?:{"|".join(expanded[dependencies.pop()])})+' ]
-                    else:
-                        loop_pattern = '|'.join([ ''.join([ f'(?:{"|".join(expanded[nn])}){{{n}}}' for nn in dependencies ]) for n in range(1, 10) ])
+                    loop_pattern = ''.join([ f'(?&RULE{cur_rule})*' if n == cur_rule else f'(?:{"|".join(expanded[n])})' for n in [ n for r in rules[cur_rule] for n in r if cur_rule in r ] ])
                     expanded[cur_rule] = chunks | { f'(?&RULE{cur_rule})' }
-                    expanded[f'RULE{cur_rule}'] = f'(?P<RULE{cur_rule}>(?:{"".join(loop_pattern)}))'
+                    expanded[f'RULE{cur_rule}'] = f'(?P<RULE{cur_rule}>(?:{"".join(loop_pattern)}))'  # capturing group definition
                 else:
                     expanded[cur_rule] = { x for n in rules[cur_rule] for x in reduce(_merge, [ expanded[nn] for nn in n ]) }
         remaining = rules.keys() - expanded.keys()
