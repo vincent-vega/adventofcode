@@ -15,7 +15,7 @@ def _bitmask(mask: str, value: int) -> int:
     return int(''.join([ bin_val[i] if m == 'X' else mask[i] for i, m in enumerate(mask) ]), 2)
 
 
-@lru_cache(maxsize=256)
+@lru_cache(maxsize=None)
 def _offsets(mask: str) -> list:
     X_idx = ( m.start() for m in re.finditer('X', mask) )
     powers = [ 2**(35 - x) for x in X_idx ]

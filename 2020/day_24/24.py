@@ -2,13 +2,12 @@
 # -*- coding: utf-8 -*-
 
 from collections import Counter
+from functools import lru_cache
 
 
-def _adj(x: int, y: int, cache: dict={}) -> set:
-    if (x, y) in cache:
-        return cache[x, y]
-    cache[x, y] = { (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx != dy }
-    return cache[x, y]
+@lru_cache(maxsize=None)
+def _adj(x: int, y: int) -> set:
+    return { (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if dx != dy }
 
 
 def _flip(floor: dict) -> dict:

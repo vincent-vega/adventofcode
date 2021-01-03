@@ -17,7 +17,7 @@ def _valid(values: list) -> bool:
     return True
 
 
-@lru_cache(maxsize=10)
+@lru_cache(maxsize=None)
 def _gaps(size: int) -> list:
     # check the whole subchain too
     return [ () ] + [ j for i in range(1, size - 1) for j in combinations(range(1, size - 1), i) ]

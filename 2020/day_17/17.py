@@ -2,29 +2,25 @@
 # -*- coding: utf-8 -*-
 
 from collections import Counter
+from functools import lru_cache
 from itertools import combinations
 
 
-def _deltas(size: int, cache: dict) -> set:
-    if 'deltas' in cache:
-        return cache['deltas']
+@lru_cache(maxsize=None)
+def _deltas(size: int) -> set:
     zero_delta = (0,) * size
-    cache['deltas'] = { c for c in combinations([-1, 0, 1] * size, size) if c != zero_delta }
-    return cache['deltas']
+    return { c for c in combinations([-1, 0, 1] * size, size) if c != zero_delta }
 
 
-def _neighbors(coord: tuple, cache: dict) -> set:
-    if coord in cache:
-        return cache[coord]
-    cache[coord] = { tuple(map(lambda c, d: c - d, coord, delta)) for delta in _deltas(len(coord), cache) }
-    return cache[coord]
+@lru_cache(maxsize=None)
+def _neighbors(coord: tuple) -> set:
+    return { tuple(map(lambda c, d: c - d, coord, delta)) for delta in _deltas(len(coord)) }
 
 
 def _cycle(cubes: dict, rounds: int=6) -> dict:
-    cache = {}
     for _ in range(rounds):
         nxt = {}
-        cubes_freq = Counter([ cc for c in cubes.keys() for cc in _neighbors(c, cache) ])
+        cubes_freq = Counter([ cc for c in cubes.keys() for cc in _neighbors(c) ])
         for coord, neigh in cubes_freq.items():
             active = cubes.get(coord)
             if active and (neigh == 2 or neigh == 3):
