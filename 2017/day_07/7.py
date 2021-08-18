@@ -9,7 +9,7 @@ Program = namedtuple('Program', [ 'name', 'weight', 'subtower' ])
 
 def _parse(line: str) -> Program:
     chunks = [ x for x in re.split(' \(|\) -> |, |\)', line) if x != '' ]
-    return Program(chunks[0], int(chunks[1]), chunks[2:])
+    return Program(chunks[0], int(chunks[1]), set(chunks[2:]))
 
 
 def _root(programs: list) -> str:
@@ -35,7 +35,7 @@ def _balance(programs: dict, name: str, weight: int=None) -> int:
         raise Exception('Too many unbalanced sub-towers')
     unbalanced_weight, _ = min(c.items(), key=lambda x: x[1])
     expected_weight, __  = max(c.items(), key=lambda x: x[1])
-    unbalanced_name = [ k for k, v in w if v == unbalanced_weight][0]
+    unbalanced_name = [ k for k, v in w if v == unbalanced_weight ][0]
     return _balance(programs, unbalanced_name, expected_weight)
 
 
