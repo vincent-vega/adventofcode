@@ -32,10 +32,10 @@ def _run(instructions: list) -> (int, int):
     M = None
     for i in instructions:
         if _check(CPU.get(i.par1, 0), i.cond, i.par2):
-             v = CPU.get(i.register, 0) + (1 if i.op == 'inc' else -1) * i.val
-             if M is None or M < v:
+            v = CPU.get(i.register, 0) + (1 if i.op == 'inc' else -1) * i.val
+            if M is None or M < v:
                 M = v
-             CPU[i.register] = v
+            CPU[i.register] = v
     return max(CPU.values()), M
 
 
