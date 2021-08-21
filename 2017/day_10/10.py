@@ -4,7 +4,7 @@
 from functools import reduce
 
 
-def _knot_hash(cord: list, values: list, skip: int=0, cur: int=0) -> list:
+def _knot_hash(cord: list, values: list, skip: int=0, cur: int=0) -> (list, int, int):
     for v in values:
         assert v <= len(cord), 'Invalid length'
         if cur + v < len(cord):
