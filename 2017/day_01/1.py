@@ -16,6 +16,6 @@ def part2(values: list) -> int:
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        values = list(map(int, ''.join(f.read().splitlines())))
-    print(part1(values))  # 1203
-    print(part2(values))  # 1146
+        values = [ list(map(int, l)) for l in f.read().splitlines() ]
+    print(*[ part1(v) for v in values ], sep='\n')  # 1203
+    print(*[ part2(v) for v in values ], sep='\n')  # 1146

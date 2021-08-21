@@ -25,6 +25,8 @@ def _check(reg: str, cond: str, val: int) -> bool:
         return reg > val
     elif cond == '>=':
         return reg >= val
+    else:
+        raise Exception('Invalid condition')
 
 
 def _run(instructions: list) -> (int, int):

@@ -38,6 +38,6 @@ def part2(blocks: list) -> int:
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        blocks = list(map(int, ''.join(f.read().splitlines()).split('\t')))
-    print(part1(blocks))  # 12841
-    print(part2(blocks))  # 8038
+        blocks = [ list(map(int, l.split('\t'))) for l in f.read().splitlines() ]
+    print(*[ part1(b) for b in blocks ], sep='\n')  # 12841
+    print(*[ part2(b) for b in blocks ], sep='\n')  # 8038
