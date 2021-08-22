@@ -2,14 +2,9 @@
 # -*- coding: utf-8 -*-
 
 
-def _parse(line: str) -> set:
-    _, ids = line.split(' <-> ')
-    return { int(i) for i in ids.split(', ') }
-
-
-def _scan(programs: dict, seen: set, target: int=0) -> set:
+def _scan(programs: dict, seen: set, target: int) -> set:
     seen.add(target)
-    group = set([ target ])
+    group = { target }
     to_scan = programs[target] - seen
     group.update(to_scan)
     group.update({ nn for n in to_scan for nn in _scan(programs, seen, n) })
@@ -21,18 +16,18 @@ def part1(programs: dict) -> int:
 
 
 def part2(programs: dict) -> int:
-    groups = []
+    cnt = 0
     left = set(programs.keys())
     while left:
         p = left.pop()
         g = _scan(programs, {p}, p)
         left -= g
-        groups.append(g)
-    return len(groups)
+        cnt += 1
+    return cnt
 
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        programs = { n: _parse(x) for n, x in enumerate(f.read().splitlines()) }
+        programs = { int(k): { int(x) for x in v.split(', ') } for k, v in map(lambda l: l.split(' <-> '), f.read().splitlines()) }
     print(part1(programs))  # 283
     print(part2(programs))  # 195
