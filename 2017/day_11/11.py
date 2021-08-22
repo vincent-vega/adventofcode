@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from functools import lru_cache
+
 
 def _move(cur: (int, int), direction: str) -> (int, int):
     x, y = cur
@@ -20,6 +22,7 @@ def _move(cur: (int, int), direction: str) -> (int, int):
         raise Exception('Invalid direction')
 
 
+@lru_cache(maxsize=None)
 def _steps(cur: (int, int)) -> int:
     cnt = 0
     while cur != (0, 0):
