@@ -4,7 +4,7 @@
 
 def _parse(line: str) -> set:
     _, ids = line.split(' <-> ')
-    return set([ int(i) for i in ids.split(', ') ])
+    return { int(i) for i in ids.split(', ') }
 
 
 def _scan(programs: dict, seen: set, target: int=0) -> set:
@@ -16,11 +16,11 @@ def _scan(programs: dict, seen: set, target: int=0) -> set:
     return group
 
 
-def part1(programs: dict):
+def part1(programs: dict) -> int:
     return len(_scan(programs, {0}, 0))
 
 
-def part2(programs: dict):
+def part2(programs: dict) -> int:
     groups = []
     left = set(programs.keys())
     while left:
