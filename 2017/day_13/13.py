@@ -39,17 +39,29 @@ def part1(firewall: dict) -> int:
     return max(cnt, 0)
 
 
+def _caught(cur: int, depth: int, direction: int, delta: int) -> bool:
+    for _ in range(delta):
+        cur, direction = _nxt(cur, depth, direction)
+    return cur == 0
+
+
 def part2(firewall: dict) -> int:
-    n = 1
-    while _cross(dict(firewall), n) > -1:
+    n = 0
+    firewall = dict(firewall)
+    scanned_levels = [ k for k, _ in filter(lambda x: x[1] is not None, firewall.items()) ]
+    while True:
         n += 1
-    return n
+        firewall = _move_scanner(firewall)
+        for layer, (cur, depth, direction) in map(lambda x: (x, firewall[x]), scanned_levels):
+            if _caught(cur, depth, direction, layer):
+                break
+        else:
+            return n
 
 
 if __name__ == '__main__':
     with open('input.txt') as f:
         layers = { k: v for k, v in map(lambda l: map(int, l.split(': ')), f.read().splitlines()) }
-        layers = { 0: 3, 1: 2, 4: 4, 6: 4 }
     firewall = { n: (0, layers[n], 1) if n in layers else None for n in range(max(layers.keys()) + 1) }
     print(part1(firewall))  # 1904
-    print(part2(firewall))  #
+    print(part2(firewall))  # 3833504
