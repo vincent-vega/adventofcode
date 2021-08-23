@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from functools import lru_cache
 
-def _nxt(cur: int, depth: int, direction: int) -> (int, int):
-    if cur == 0 and direction == -1:
+
+@lru_cache(maxsize=None)
+def _nxt(cur: int, depth: int, step: int) -> (int, int):
+    if cur == 0 and step == -1:
         return 1, 1
-    elif cur == depth - 1 and direction == 1:
+    elif cur == depth - 1 and step == 1:
         return depth - 2, -1
     else:
-        return cur + direction, direction
+        return cur + step, step
 
 
 def _move_scanner(firewall: dict) -> dict:
-    for k, v in filter(lambda x: x[1] is not None, firewall.items()):
-        scanner, depth, direction = v
-        scanner, direction = _nxt(scanner, depth, direction)
-        firewall[k] = (scanner, depth, direction)
+    for layer, (scanner, depth, step) in filter(lambda x: x[1] is not None, firewall.items()):
+        scanner, step = _nxt(scanner, depth, step)
+        firewall[layer] = (scanner, depth, step)
     return firewall
 
 
@@ -39,9 +41,10 @@ def part1(firewall: dict) -> int:
     return max(cnt, 0)
 
 
-def _caught(cur: int, depth: int, direction: int, delta: int) -> bool:
+@lru_cache(maxsize=None)
+def _caught(cur: int, depth: int, step: int, delta: int) -> bool:
     for _ in range(delta):
-        cur, direction = _nxt(cur, depth, direction)
+        cur, step = _nxt(cur, depth, step)
     return cur == 0
 
 
@@ -52,8 +55,8 @@ def part2(firewall: dict) -> int:
     while True:
         n += 1
         firewall = _move_scanner(firewall)
-        for layer, (cur, depth, direction) in map(lambda x: (x, firewall[x]), scanned_levels):
-            if _caught(cur, depth, direction, layer):
+        for layer, (cur, depth, step) in map(lambda x: (x, firewall[x]), scanned_levels):
+            if _caught(cur, depth, step, layer):
                 break
         else:
             return n
