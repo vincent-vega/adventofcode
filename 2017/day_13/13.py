@@ -22,30 +22,30 @@ def _move_scanner(firewall: dict) -> dict:
 def _cross(firewall: dict, wait: int=0) -> int:
     for _ in range(wait):
         firewall = _move_scanner(firewall)
-    cnt = 0
+    cnt = -1
     for i in range(len(firewall)):
         if firewall[i] is not None:
             scanner, depth, _ = firewall[i]
             if scanner == 0:
+                if cnt == -1:
+                    cnt = 0
                 cnt += i * depth
         firewall = _move_scanner(firewall)
     return cnt
 
 
 def part1(firewall: dict) -> int:
-    return _cross(dict(firewall))
+    cnt = _cross(dict(firewall))
+    return max(cnt, 0)
 
 
 def part2(firewall: dict) -> int:
     n = 1
-    while _cross(dict(firewall), n):
+    while _cross(dict(firewall), n) > -1:
         n += 1
-        if n % 1000 == 0:
-            print(n)
     return n
 
 
-# import pudb; pu.db
 if __name__ == '__main__':
     with open('input.txt') as f:
         layers = { k: v for k, v in map(lambda l: map(int, l.split(': ')), f.read().splitlines()) }
