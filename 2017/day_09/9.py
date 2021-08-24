@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-def part1(stream: list) -> int:
+def part1(stream: str) -> int:
     nest_lvl = score = 0
     cancel = garbage = False
     for c in stream:
@@ -22,7 +22,7 @@ def part1(stream: list) -> int:
     return score
 
 
-def part2(stream: list) -> int:
+def part2(stream: str) -> int:
     cnt = 0
     cancel = garbage = False
     for c in stream:

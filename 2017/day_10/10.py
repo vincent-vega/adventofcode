@@ -21,13 +21,13 @@ def _knot_hash(cord: list, values: list, skip: int=0, cur: int=0) -> (list, int,
     return cord, skip, cur
 
 
-def part1(values: list) -> int:
+def part1(values: str) -> int:
     values = list(map(int, values.split(',')))
     cord, _, __ = _knot_hash(list(range(256)), values)
     return cord[0] * cord[1]
 
 
-def part2(values: list) -> str:
+def part2(values: str) -> str:
     values = [ ord(v) for v in values ] + [17, 31, 73, 47, 23]
     skip = cur = 0
     cord = list(range(256))
