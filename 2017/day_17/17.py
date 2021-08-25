@@ -18,7 +18,13 @@ def part1(steps: int, cnt: int) -> int:
 
 
 def part2(steps: int, cnt: int) -> int:
-    return _whirl(steps, cnt, 0)
+    result = None
+    cur = 0
+    for n in range(1, cnt + 1):
+        cur = (cur + steps) % n + 1
+        if cur == 1:
+            result = n
+    return result
 
 
 if __name__ == '__main__':
