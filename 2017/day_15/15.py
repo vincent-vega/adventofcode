@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from typing import Generator
-import re
 
 
 def _lowest16(n: int) -> int:
