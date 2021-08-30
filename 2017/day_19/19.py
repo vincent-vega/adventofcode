@@ -8,7 +8,7 @@ def _adj(x: int, y: int) -> set:
     return { (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if abs(dx) != abs(dy) }
 
 
-def _validate(diagram: dict, cur: (int, int), nxt: (int, int)) -> bool:
+def _validate(diagram: list, cur: (int, int), nxt: (int, int)) -> bool:
     x, y = nxt
     if diagram[y][x] == ' ':
         return False
@@ -18,7 +18,7 @@ def _validate(diagram: dict, cur: (int, int), nxt: (int, int)) -> bool:
     return True
 
 
-def _nxt(seen: set, cur: (int, int), diagram) -> (int, int):
+def _nxt(seen: set, cur: (int, int), diagram: list) -> (int, int):
     c_x, c_y = cur
     for x, y in filter(lambda nxt: _validate(diagram, cur, nxt), _adj(c_x, c_y)):
         if y == c_y and diagram[y][x] == '|':
@@ -52,7 +52,7 @@ def part1(diagram: list, cur: (int, int)) -> str:
     return ''.join(path)
 
 
-def part2(diagram: dict, cur: (int, int)) -> int:
+def part2(diagram: list, cur: (int, int)) -> int:
     x, y = cur
     seen = { cur }
     cnt = 1
