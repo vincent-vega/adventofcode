@@ -31,7 +31,7 @@ class Program:
 
 
 def _init() -> dict:
-    return { chr(ord('a') + n): 0 for n in range(ord('z') - ord('a')) }
+    return { chr(ord('a') + n): 0 for n in range(ord('z') - ord('a') + 1) }
 
 
 def _value(registers: dict, parameter: str) -> int:
