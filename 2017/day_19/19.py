@@ -26,6 +26,8 @@ def _nxt(seen: set, cur: (int, int), diagram) -> (int, int):
                 y += dy
                 while diagram[y][x] == '-':
                     y += dy
+            if diagram[y][x] not in letters.union({ '+', '|' }):
+                continue
         elif prev == '-':
             if y != c_y:
                 continue
@@ -34,10 +36,23 @@ def _nxt(seen: set, cur: (int, int), diagram) -> (int, int):
                 x += dx
                 while diagram[y][x] == '|':
                     x += dx
-        elif prev in letters.union({ '+' }) and x == c_x and c not in letters.union({ '|' }):
-            continue
-        elif prev in letters.union({ '+' }) and y == c_y and c not in letters.union({ '-' }):
-            continue
+            if diagram[y][x] not in letters.union({ '+', '-' }):
+                continue
+        elif prev in letters.union({ '+' }):
+            if y == c_y and c == '|':
+                dx = x - c_x
+                x += dx
+                while diagram[y][x] == '|':
+                    x += dx
+                if diagram[y][x] not in letters.union({ '+', '-' }):
+                    continue
+            elif x == c_x and c == '-':
+                dy = y - c_y
+                y += dy
+                while diagram[y][x] == '-':
+                    y += dy
+                if diagram[y][x] not in letters.union({ '+', '|' }):
+                    continue
         if (x, y) not in seen:
             seen.add((x, y))
             return x, y
