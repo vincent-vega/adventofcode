@@ -8,51 +8,33 @@ def _adj(x: int, y: int, delta: int) -> set:
     return { (x + dx, y + dy) for dx in (-1 * delta, 0, delta) for dy in (-1 * delta, 0, delta) if abs(dx) != abs(dy) }
 
 
-def _not_space(diagram: dict, coord: (int, int)) -> bool:
-    x, y = coord
-    return diagram[y][x] != ' '
+def _validate(diagram: dict, cur: (int, int), nxt: (int, int)) -> bool:
+    x, y = nxt
+    if diagram[y][x] == ' ':
+        return False
+    c_x, c_y = cur
+    if diagram[c_y][c_x] == '|' and x != c_x or diagram[c_y][c_x] == '-' and y != c_y:
+        return False
+    return True
 
 
 def _nxt(seen: set, cur: (int, int), diagram) -> (int, int):
     c_x, c_y = cur
-    prev = diagram[c_y][c_x]
-    for x, y in filter(lambda coord: _not_space(diagram, coord), _adj(c_x, c_y, 1)):
-        c = diagram[y][x]
-        if prev == '|':
-            if x != c_x:
-                continue
-            if c == '-':
-                dy = y - c_y
-                y += dy
-                while diagram[y][x] == '-':
-                    y += dy
-            if diagram[y][x] not in letters.union({ '+', '|' }):
-                continue
-        elif prev == '-':
-            if y != c_y:
-                continue
-            if c == '|':
-                dx = x - c_x
+    for x, y in filter(lambda nxt: _validate(diagram, cur, nxt), _adj(c_x, c_y, 1)):
+        if y == c_y and diagram[y][x] == '|':
+            dx = x - c_x
+            x += dx
+            while diagram[y][x] == '|':
                 x += dx
-                while diagram[y][x] == '|':
-                    x += dx
             if diagram[y][x] not in letters.union({ '+', '-' }):
                 continue
-        elif prev in letters.union({ '+' }):
-            if y == c_y and c == '|':
-                dx = x - c_x
-                x += dx
-                while diagram[y][x] == '|':
-                    x += dx
-                if diagram[y][x] not in letters.union({ '+', '-' }):
-                    continue
-            elif x == c_x and c == '-':
-                dy = y - c_y
+        elif x == c_x and diagram[y][x] == '-':
+            dy = y - c_y
+            y += dy
+            while diagram[y][x] == '-':
                 y += dy
-                while diagram[y][x] == '-':
-                    y += dy
-                if diagram[y][x] not in letters.union({ '+', '|' }):
-                    continue
+            if diagram[y][x] not in letters.union({ '+', '|' }):
+                continue
         if (x, y) not in seen:
             seen.add((x, y))
             return x, y
