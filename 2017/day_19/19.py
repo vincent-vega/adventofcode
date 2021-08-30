@@ -4,8 +4,8 @@
 letters = { chr(ord('A') + n) for n in range(ord('Z') - ord('A') + 1) }
 
 
-def _adj(x: int, y: int, delta: int) -> set:
-    return { (x + dx, y + dy) for dx in (-1 * delta, 0, delta) for dy in (-1 * delta, 0, delta) if abs(dx) != abs(dy) }
+def _adj(x: int, y: int) -> set:
+    return { (x + dx, y + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if abs(dx) != abs(dy) }
 
 
 def _validate(diagram: dict, cur: (int, int), nxt: (int, int)) -> bool:
@@ -20,7 +20,7 @@ def _validate(diagram: dict, cur: (int, int), nxt: (int, int)) -> bool:
 
 def _nxt(seen: set, cur: (int, int), diagram) -> (int, int):
     c_x, c_y = cur
-    for x, y in filter(lambda nxt: _validate(diagram, cur, nxt), _adj(c_x, c_y, 1)):
+    for x, y in filter(lambda nxt: _validate(diagram, cur, nxt), _adj(c_x, c_y)):
         if y == c_y and diagram[y][x] == '|':
             dx = x - c_x
             x += dx
