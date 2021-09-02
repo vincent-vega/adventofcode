@@ -10,7 +10,6 @@ class Program:
         self.snd = []
         self.registers = { k: n if k == 'p' else 0 for k, v in _init().items() }
 
-
     def run(self) -> int:
         while self.cur > -1 and self.cur < len(self.instructions):
             i = instructions[self.cur]

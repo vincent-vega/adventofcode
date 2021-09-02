@@ -47,8 +47,7 @@ def _process_distances(particles: dict) -> int:
 def _move(tracked: dict) -> dict:
     return { n: (Particle(tuple(map(sum, zip(p.position, map(sum, zip(p.velocity, p.acceleration))))),
                           tuple(map(sum, zip(p.velocity, p.acceleration))),
-                          p.acceleration), d)
-                for n, (p, d) in tracked.items() }
+                          p.acceleration), d) for n, (p, d) in tracked.items() }
 
 
 def _prune_collisions(tracked: dict) -> dict:
