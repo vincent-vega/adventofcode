@@ -34,15 +34,15 @@ def part1(program: list) -> int:
 
 
 def part2() -> int:
-    # see code analysis
-    prime_num = []
+    # see code analysis "solution-notes.txt"
+    prime_num_cnt = 0
     for b in range(108417, 125401, 34):
         for d in range(3, int(sqrt(b)), 2):
             if b % d == 0:
                 break
         else:
-            prime_num.append(b)
-    return len(range(108400, 125400 + 17, 17)) - len(prime_num)
+            prime_num_cnt += 1
+    return (125400 - 108400) // 17 + 1 - prime_num_cnt  # non-prime numbers count between 108400 and 125400
 
 
 if __name__ == '__main__':

@@ -47,13 +47,13 @@ e = mid loop accumulator
 b = outer loop accumulator
 f = h increment switch
 
-inner loop: g, e, b
-    > b - 1 times
-mid loop: d, g, b
-    > b - 1 times
-outer loop: g, b, c
-    > 1001x
-    > b = range(108400, 125400, 17)
+inner loop: b, e, g
+    > (b - 1) times
+mid loop: b, d, g
+    > (b - 1) times
+outer loop: b, c, g
+    > 1001 times
+    > b = range(108400, 125401, 17)
 
 
 inner #1 mid #1 outer #1
