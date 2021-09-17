@@ -1,0 +1,81 @@
+set b 84
+set c b
+jnz a 2
+jnz 1 5
+mul b 100
+sub b -100000
+set c b
+sub c -17000
+
+                                            # outer loop
+set f 1 <<<---------------------------------------------┐
+set d 2                                                 |
+                                                        |
+                             # mid loop                 |
+set e 2 <<<----------------------------┐                |
+                                       |                |
+          # inner loop                 |                |
+set g d <<<-----------┐                |                |
+mul g e               |                |                |
+sub g b               |                |                |
+jnz g 2    d * e = b  |                |                |
+set f 0               |                |                |
+sub e -1              |                |                |
+set g e               |                |                |
+sub g b               |                |                |
+jnz g -8 >>>----------┘ g = b          |                |
+                                       |                |
+sub d -1                               |                |
+set g d                                |                |
+sub g b                                |                |
+jnz g -13 >>>--------------------------┘ g = d = b      |
+                                                        |
+jnz f 2                                                 |
+sub h -1                                                |
+set g b                                                 |
+sub g c                                                 |
+jnz g 2                                                 |
+jnz 1 3    *EXIT* g = b - c                             |
+sub b -17                                               |
+jnz 1 -23 >>>-------------------------------------------┘
+
+start {'a': 1, 'b': 108400, 'c': 125400, 'd': 2, 'e': 2, 'f': 1, 'g': 0, 'h': 0}
+immutable: a, c
+
+d = inner loop accumulator
+e = mid loop accumulator
+b = outer loop accumulator
+f = h increment switch
+
+inner loop: g, e, b
+    > b - 1 times
+mid loop: d, g, b
+    > b - 1 times
+outer loop: g, b, c
+    > 1001x
+    > b = range(108400, 125400, 17)
+
+
+inner #1 mid #1 outer #1
+    b = 108400
+    d = 2
+    e = 2
+inner #2 mid #1 outer #1
+    b = 108400
+    d = 2
+    e = 3
+...
+inner #108399 mid #1 outer #1
+    b = 108400
+    d = 2
+    e = 108400
+...
+inner #1 mid #2 outer #1
+    b = 108400
+    d = 3
+    e = 2
+...
+inner #1 mid #1 outer #2
+    b = 108417
+    d = 2
+    e = 2
