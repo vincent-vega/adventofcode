@@ -7,21 +7,25 @@ import re
 Actions = namedtuple('Actions', [ 'write', 'move', 'next' ])
 
 
-def _resize(tape: list, beginning: bool, size=10000) -> list:
+def _resize(tape: list, beginning: bool, size: int) -> list:
     return [ 0 ] * size + tape if beginning else tape + [ 0 ] * size
 
 
 def part1(blueprint: dict) -> int:
     cur_state = 'A'
-    tape = [ 0 ] * 1001
+    tape = [ 0 ] * 1024
     ptr = len(tape) // 2
+    resize_N = 8 * 2**10
     for _ in range(blueprint['steps']):
         action = blueprint[cur_state][tape[ptr]]
         tape[ptr] = action.write
         if ptr == 0 and action.move < 0:
-            tape = _resize(tape, True)
+            tape = _resize(tape, True, resize_N)
+            ptr = resize_N
+            resize_N *= 2
         elif ptr == len(tape) - 1 and action.move > 0:
-            tape = _resize(tape, False)
+            tape = _resize(tape, False, resize_N)
+            resize_N *= 2
         ptr += action.move
         cur_state = action.next
     return sum(tape)
