@@ -8,8 +8,8 @@ def part1(values: list) -> int:
     area = [ [ 0 for x in range(1000) ] for y in range(1000) ]
     count = 0
     for claim in values:
-        y, x = map(int, re.search('^.+\s([0-9]+,[0-9]+):.+$', claim).group(1).split(','))
-        dim_y, dim_x = map(int, re.search('^.+:\s([0-9]+x[0-9]+)$', claim).group(1).split('x'))
+        y, x = map(int, re.search(r'^.+\s(\d+,\d+):.+$', claim).group(1).split(','))
+        dim_y, dim_x = map(int, re.search(r'^.+:\s(\d+x\d+)$', claim).group(1).split('x'))
         for r in range(x, x + dim_x):
             for c in range(y, y + dim_y):
                 if area[r][c] == 1:
