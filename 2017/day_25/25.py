@@ -7,35 +7,26 @@ import re
 Actions = namedtuple('Actions', [ 'write', 'move', 'next' ])
 
 
-def _resize(tape: list, beginning: bool, size: int) -> list:
-    return [ 0 ] * size + tape if beginning else tape + [ 0 ] * size
-
-
 def part1(blueprint: dict) -> int:
-    cur_state = 'A'
-    tape = [ 0 ] * 1024
-    ptr = len(tape) // 2
-    resize_N = 8 * 2**10
+    cur_state = blueprint['start_state']
+    assert cur_state in blueprint, 'Unknown start state'
+    tape = {}
+    ptr = 0
     for _ in range(blueprint['steps']):
-        action = blueprint[cur_state][tape[ptr]]
+        action = blueprint[cur_state][tape.get(ptr, 0)]
         tape[ptr] = action.write
-        if ptr == 0 and action.move < 0:
-            tape = _resize(tape, True, resize_N)
-            ptr = resize_N
-            resize_N *= 2
-        elif ptr == len(tape) - 1 and action.move > 0:
-            tape = _resize(tape, False, resize_N)
-            resize_N *= 2
         ptr += action.move
         cur_state = action.next
-    return sum(tape)
+    return sum(tape.values())
 
 
 def _parse(lines: list) -> dict:
     blueprint = defaultdict(dict)
     cur_state = cur_val = cur_write_val = cur_offset = None
     for l in lines:
-        if 'checksum' in l:
+        if 'Begin in state' in l:
+            blueprint['start_state'] = l.split()[-1][:-1]
+        elif 'checksum' in l:
             blueprint['steps'] = int(re.findall('\\d+', l).pop())
         elif 'In state' in l:
             cur_state = l.split()[-1][:-1]
