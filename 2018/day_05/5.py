@@ -13,20 +13,14 @@ def _collapse(polymer: str) -> int:
     result = []
     while idx < len(polymer):
         if idx == len(polymer) - 1:
-            if not _react(polymer[idx], result[-1]):
-                result.append(polymer[idx])
-            else:
-                result.pop()
+            result.append(polymer[idx])
             break
         elif _react(polymer[idx], polymer[idx + 1]):
             idx += 2
-            if idx > len(polymer) - 1:
-                break
             while result and idx < len(polymer) and _react(polymer[idx], result[-1]):
                 result.pop()
                 idx += 1
         else:
-            assert not _react(polymer[idx], polymer[idx + 1])
             result.append(polymer[idx])
             idx += 1
     return len(result)
