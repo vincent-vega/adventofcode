@@ -8,7 +8,6 @@ class DisjointSet:
         self.points = []
         self.parent = list(range(size))
         self.rank = [0] * size
-        self.constellations = size
         self.max_distance = max_distance
 
 
@@ -19,6 +18,10 @@ class DisjointSet:
                 self._union(i, j)
         self.points.append(point)
         assert j == self.points.index(point)
+
+
+    def constellations(self) -> int:
+        return sum([ 1 for n, p in enumerate(self.parent) if n == p ])
 
 
     def _find(self, n: int) -> int:
@@ -38,7 +41,6 @@ class DisjointSet:
             self.parent[p2] = p1
             if self.rank[p1] == self.rank[p2]:
                 self.rank[p1] += 1
-        self.constellations -= 1
 
 
 def _distance(p1: tuple, p2: tuple) -> int:
@@ -49,7 +51,7 @@ def part1(points: list) -> int:
     ds = DisjointSet(len(points), 3)
     for p in points:
         ds.add(p)
-    return ds.constellations
+    return ds.constellations()
 
 
 if __name__ == '__main__':
