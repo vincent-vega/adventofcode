@@ -17,7 +17,6 @@ class DisjointSet:
             if _distance(self.points[i], point) <= self.max_distance:
                 self._union(i, j)
         self.points.append(point)
-        assert j == self.points.index(point)
 
 
     def constellations(self) -> int:
