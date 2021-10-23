@@ -8,7 +8,7 @@ def _manhattan(a: (int, int), b: (int, int)) -> int:
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
-def _closer(locations: dict, target: (int, int)) -> int:
+def _closest(locations: dict, target: (int, int)) -> int:
     min_distance = min_name = None
     for n, coordinate in locations.items():
         if coordinate == target:
@@ -28,13 +28,13 @@ def part1(locations: dict, top_left: (int, int), bottom_right: (int, int)) -> in
     counter = { n: 0 for n in range(len(locations)) }
     for x in range(min_X, max_X + 1):
         for y in range(min_Y, max_Y + 1):
-            closer = _closer(locations, (x, y))
-            if closer is None or counter[closer] < 0:
+            closest = _closest(locations, (x, y))
+            if closest is None or counter[closest] < 0:
                 continue
             if x == 0 or y == 0 or x == max_X or y == max_Y:
-                counter[closer] = -1
+                counter[closest] = -1
             else:
-                counter[closer] += 1
+                counter[closest] += 1
     return max(counter.values())
 
 
