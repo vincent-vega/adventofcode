@@ -26,7 +26,6 @@ def _collapse(polymer: str) -> int:
                 result.pop()
                 idx += 1
         else:
-            assert not _react(polymer[idx], polymer[idx + 1])
             result.append(polymer[idx])
             idx += 1
     return len(result)
