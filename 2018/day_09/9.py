@@ -5,7 +5,7 @@ from collections import deque
 import re
 
 
-def _play(numplayers: int, nummarbles: int):
+def _play(numplayers: int, nummarbles: int) -> int:
     score = { n: 0 for n in range(1, numplayers + 1) }
     circle = deque([ 0 ])
     for marble in range(1, nummarbles + 1):
