@@ -19,7 +19,7 @@ def part1(grid: dict, grid_size: int, square_size: int) -> str:
     return ','.join(map(str, top_left))
 
 
-# _https://en.wikipedia.org/wiki/Summed-area_table
+# https://en.wikipedia.org/wiki/Summed-area_table
 def _summered_area(grid: dict, grid_size: int) -> dict:
     summered_area_table = {}
     for y in range(grid_size, 0, -1):
