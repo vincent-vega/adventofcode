@@ -49,6 +49,6 @@ def part2(pots: set, rules: dict) -> int:
 if __name__ == '__main__':
     with open('input.txt') as f:
         pots = { n for n, c in enumerate(f.readline()[len('initial state: '):].strip()) if c == '#' }
-        rules = { tuple([n for n, c in enumerate(k, -2) if c == '#' ]): v == '#' for k, v in map(lambda line: line.split(' => '), filter(len, f.read().splitlines())) }
+        rules = { tuple(n for n, c in enumerate(k, -2) if c == '#'): v == '#' for k, v in map(lambda line: line.split(' => '), filter(len, f.read().splitlines())) }
     print(part1(pots, rules))  # 3410
     print(part2(pots, rules))  # 4000000001480
