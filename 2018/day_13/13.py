@@ -74,7 +74,7 @@ def part1(tracks: dict, carts: List[Cart]) -> str:
         carts = _rearrange(carts)
 
 
-def part2(tracks: dict, carts: List[Cart]):
+def part2(tracks: dict, carts: List[Cart]) -> str:
     while len(carts) > 1:
         crashed = set()
         for n, c in filter(lambda x: x[0] not in crashed, enumerate(carts)):
