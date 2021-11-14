@@ -44,7 +44,7 @@ class Cart:
             return c_x, c_y + 1 if c_x > p_x else c_y - 1
         return c_x - 1 if c_y > p_y else c_x + 1, c_y
 
-    def move(self, tracks: set):
+    def move(self, tracks: dict):
         adj = { a for a in tracks[self.next] if a != (self.x, self.y) }
         if len(adj) == 1:
             self.x, self.y = self.next
@@ -65,7 +65,7 @@ def _rearrange(carts: List[Cart]) -> List[Cart]:
     return sorted(carts, key=lambda c: (c.y, c.x))
 
 
-def part1(tracks: set, carts: List[Cart]) -> str:
+def part1(tracks: dict, carts: List[Cart]) -> str:
     while True:
         for n, c in enumerate(carts):
             c.move(tracks)
@@ -74,7 +74,7 @@ def part1(tracks: set, carts: List[Cart]) -> str:
         carts = _rearrange(carts)
 
 
-def part2(tracks: set, carts: List[Cart]):
+def part2(tracks: dict, carts: List[Cart]):
     while len(carts) > 1:
         crashed = set()
         for n, c in filter(lambda x: x[0] not in crashed, enumerate(carts)):
