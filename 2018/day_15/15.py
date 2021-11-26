@@ -5,7 +5,7 @@ from collections import defaultdict, deque, namedtuple
 from typing import Dict, List, Set, Tuple
 
 Coord = Tuple[int, int]
-Finder = namedtuple('Finder', [ 'x', 'y', 'path' ]) # TODO instead of path use steps + first move
+Finder = namedtuple('Finder', [ 'x', 'y', 'steps', 'start' ])
 
 
 class Unit:
@@ -20,7 +20,7 @@ class Unit:
         self.x = x
         self.y = y
 
-    def __str__(self): # TODO remove
+    def __str__(self):  # TODO remove
         return f'{self.type} coord {self.x},{self.y} - {self.attack_power} att power {self.hp} HP'
 
 
@@ -42,29 +42,27 @@ def _parse_target(target: Set[Unit], wall: Set[Coord]) -> Dict[Coord, List[Unit]
     return target_mapping
 
 
-def _next(u: Unit, others: Set[Unit], target_adj: Set[Coord], wall: Set[Coord], debug=False) -> Coord: # TODO remove debug
+def _next(u: Unit, others: Set[Unit], target_adj: Set[Coord], wall: Set[Coord], debug=False) -> Coord:  # TODO remove debug
     F = []
     min_path_found = None
-    Q = deque([ Finder(u.x + dx, u.y + dy, [ (u.x + dx, u.y + dy) ]) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if abs(dx) != abs(dy) ])
+    Q = deque([ Finder(u.x + dx, u.y + dy, 1, (u.x + dx, u.y + dy)) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if abs(dx) != abs(dy) ])
     others = { (o.x, o.y) for o in others }
     visited = { (u.x, u.y) }
     while Q:
         f = Q.popleft()
-        if min_path_found is not None and len(f.path) > min_path_found:
+        if min_path_found is not None and f.steps > min_path_found:
             continue
         elif not _valid(f.x, f.y, wall, others):
             continue
         elif (f.x, f.y) in target_adj:
-            min_path_found = len(f.path) if min_path_found is None else min(min_path_found, len(f.path))
+            min_path_found = f.steps if min_path_found is None else min(min_path_found, f.steps)
             F.append(f)
         elif (f.x, f.y) not in visited:
             visited.add((f.x, f.y))
-            Q.extend([ Finder(f.x + dx, f.y + dy, f.path + [ (f.x + dx, f.y + dy) ]) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if abs(dx) != abs(dy) ])
+            Q.extend([ Finder(f.x + dx, f.y + dy, f.steps + 1, f.start) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if abs(dx) != abs(dy) ])
     if not F:
-        return u.x, u.y # can't move
-    # if debug:
-        # print(*sorted(F, key=lambda f: (len(f.path), f.path[-1][1], f.path[-1][0], f.path[0][1], f.path[0][0]), reverse=True), sep='\n')
-    return min(F, key=lambda f: (len(f.path), f.y, f.x, f.path[0][1], f.path[0][0])).path[0]
+        return u.x, u.y  # can't move
+    return min(F, key=lambda f: (f.steps, f.y, f.x, f.start[1], f.start[0])).start
 
 
 def part1(units: List[Unit], wall: Set[Coord]) -> int:
@@ -74,13 +72,13 @@ def part1(units: List[Unit], wall: Set[Coord]) -> int:
     rounds = 0
     while E > 0 and G > 0:
         units = _rearrange(units)
-        for player, u in enumerate(units, 1):
-            if player == len(units):
+        for n, u in ((n, u) for n, u in enumerate(units, 1) if u.hp):
+            if n == len(units):
                 rounds += 1
             target_mapping = _parse_target(goblins if u.type == 'E' else elves, wall)
             if (u.x, u.y) not in target_mapping:
-                x, y = _next(u, { other for other in units if (u.x, u.y) != (other.x, other.y) and other.hp }, target_mapping.keys(), wall, rounds == 24)
-                u.move(x, y)
+                others = { other for other in units if (u.x, u.y) != (other.x, other.y) and other.hp }
+                u.move(*_next(u, others, target_mapping.keys(), wall))
             if (u.x, u.y) in target_mapping:
                 target = min(target_mapping[u.x, u.y], key=lambda t: (t.hp, t.y, t.x))
                 target.hp = max(0, target.hp - u.attack_power)
@@ -93,13 +91,8 @@ def part1(units: List[Unit], wall: Set[Coord]) -> int:
                         elves = { u for u in units if u.type == 'E' and u.hp }
                     if E == 0 or G == 0:
                         break
-        # if rounds + 1 in (1, 2, 23, 24, 25, 26, 27, 28, 47):
-        # print(f'\nR{rounds}')
-        # _print(units, wall)
-        # print([ f'{u.type}({u.x},{u.y}):{u.hp}' for u in sorted(units, key=lambda u: (u.y, u.x)) if u.hp ])
-    # _print(units, wall)
     print(f'R {rounds} HP {sum(u.hp for u in units if u.hp)}')
-    return rounds * sum(u.hp for u in units if u.hp)
+    return rounds * sum(u.hp for u in units)
 
 
 def _print(units, wall):
@@ -118,27 +111,26 @@ def part2() -> int:
     pass
 
 
-def _parse_line(line: str, y) -> set:
-    return { Unit(c, x, y) for x, c in enumerate(line, 1) if c in 'EG' }
-
-
-
 def _test(filename, result):
-    with open(filename) as f:
-        unit = []
-        wall = set()
-        for y, line in enumerate(f.read().splitlines(), 1):
-            for x, c in enumerate(line, 1):
-                if c in 'EG':
-                    unit.append(Unit(c, x, y))
-                elif c == '#':
-                    wall.add((x, y))
-        r = part1(unit, wall)
+    r = part1(*_parse(filename))
     try:
         assert r == result, f'TEST {filename} KO -> {r}'
         print(f'TEST {filename} OK')
     except Exception as e:
         print(e)
+
+
+def _parse(filename: str) -> Tuple[List[Unit], Set[Coord]]:
+    with open(filename) as f:
+        units = []
+        wall = set()
+        for y, line in enumerate(f.read().splitlines(), 1):
+            for x, c in enumerate(line, 1):
+                if c in 'EG':
+                    units.append(Unit(c, x, y))
+                elif c == '#':
+                    wall.add((x, y))
+    return units, wall
 
 
 if __name__ == '__main__':
@@ -148,18 +140,8 @@ if __name__ == '__main__':
     _test('example27755.txt', 27755)
     _test('example28944.txt', 28944)
     _test('example18740.txt', 18740)
-    '''
-    with open('input.txt') as f:
-        unit = []
-        wall = set()
-        for y, line in enumerate(f.read().splitlines(), 1):
-            for x, c in enumerate(line, 1):
-                if c in 'EG':
-                    unit.append(Unit(c, x, y))
-                elif c == '#':
-                    wall.add((x, y))
-    r = part1(unit, wall)
-    assert r > 219681
+    units, wall = _parse('input.txt')
+    r = part1(units, wall)
+    assert r > 220374
+    assert r != 223236
     print(r)
-    # print(part2())  #
-    '''
