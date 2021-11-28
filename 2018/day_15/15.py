@@ -2,6 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict, deque, namedtuple
+from copy import deepcopy
+from functools import lru_cache
 from typing import Dict, List, Set, Tuple
 
 Coord = Tuple[int, int]
@@ -20,9 +22,6 @@ class Unit:
         self.x = x
         self.y = y
 
-    def __str__(self):  # TODO remove
-        return f'{self.type} coord {self.x},{self.y} - {self.attack_power} att power {self.hp} HP'
-
 
 def _rearrange(units: List[Unit]) -> List[Unit]:
     return sorted([ u for u in units if u.hp ], key=lambda u: (u.y, u.x))
@@ -32,20 +31,23 @@ def _valid(x: int, y: int, wall: Set[Coord], units: Set[Coord]) -> bool:
     return x > 0 and y > 0 and (x, y) not in wall and (x, y) not in units
 
 
+@lru_cache(maxsize=1024)
+def _adjacent(x: int, y: int) -> Tuple[Coord]:
+    return (x, y - 1), (x - 1, y), (x + 1, y), (x, y + 1)
+
+
 def _parse_target(target: Set[Unit], wall: Set[Coord]) -> Dict[Coord, List[Unit]]:
     target_mapping = defaultdict(list)
     for t in target:
-        for dx in (-1, 0, 1):
-            for dy in (-1, 0, 1):
-                if abs(dx) != abs(dy) and _valid(t.x + dx, t.y + dy, wall, set()):
-                    target_mapping[t.x + dx, t.y + dy].append(t)
+        for x, y in _adjacent(t.x, t.y):
+            target_mapping[x, y].append(t)
     return target_mapping
 
 
-def _next(u: Unit, others: Set[Unit], target_adj: Set[Coord], wall: Set[Coord], debug=False) -> Coord:  # TODO remove debug
+def _next(u: Unit, others: Set[Unit], target_adj: Set[Coord], wall: Set[Coord]) -> Coord:
     F = []
     min_path_found = None
-    Q = deque([ Finder(u.x + dx, u.y + dy, 1, (u.x + dx, u.y + dy)) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if abs(dx) != abs(dy) ])
+    Q = deque([ Finder(x, y, 1, (x, y)) for x, y in _adjacent(u.x, u.y)])  # finders need to be spawned in reading order
     others = { (o.x, o.y) for o in others }
     visited = { (u.x, u.y) }
     while Q:
@@ -59,65 +61,56 @@ def _next(u: Unit, others: Set[Unit], target_adj: Set[Coord], wall: Set[Coord], 
             F.append(f)
         elif (f.x, f.y) not in visited:
             visited.add((f.x, f.y))
-            Q.extend([ Finder(f.x + dx, f.y + dy, f.steps + 1, f.start) for dx in (-1, 0, 1) for dy in (-1, 0, 1) if abs(dx) != abs(dy) ])
+            Q.extend([ Finder(x, y, f.steps + 1, f.start) for x, y in _adjacent(f.x, f.y) ])  # finders need to be spawned in reading order
     if not F:
         return u.x, u.y  # can't move
     return min(F, key=lambda f: (f.steps, f.y, f.x, f.start[1], f.start[0])).start
 
 
-def part1(units: List[Unit], wall: Set[Coord]) -> int:
+def _fight(units: List[Unit], wall: Set[Coord], interrupt_on_death: bool=False) -> Tuple[int, List[Unit]]:
     goblins = { u for u in units if u.type == 'G' }
     elves = { u for u in units if u.type == 'E' }
-    E, G = len(elves), len(goblins)
     rounds = 0
-    while E > 0 and G > 0:
+    while elves and goblins:
         units = _rearrange(units)
         for n, u in ((n, u) for n, u in enumerate(units, 1) if u.hp):
-            if n == len(units):
-                rounds += 1
             target_mapping = _parse_target(goblins if u.type == 'E' else elves, wall)
             if (u.x, u.y) not in target_mapping:
+                # not in target range
                 others = { other for other in units if (u.x, u.y) != (other.x, other.y) and other.hp }
                 u.move(*_next(u, others, target_mapping.keys(), wall))
             if (u.x, u.y) in target_mapping:
+                # attack
                 target = min(target_mapping[u.x, u.y], key=lambda t: (t.hp, t.y, t.x))
                 target.hp = max(0, target.hp - u.attack_power)
                 if not target.hp:
                     if target.type == 'G':
-                        G -= 1
                         goblins = { u for u in units if u.type == 'G' and u.hp }
                     else:
-                        E -= 1
+                        if interrupt_on_death:
+                            return None, None
                         elves = { u for u in units if u.type == 'E' and u.hp }
-                    if E == 0 or G == 0:
+                    if not elves or not goblins:
                         break
-    print(f'R {rounds} HP {sum(u.hp for u in units if u.hp)}')
+        if goblins and elves or n == len(units):
+            rounds += 1
+    return rounds, [ u for u in units if u.hp ]
+
+
+def part1(units: List[Unit], wall: Set[Coord]) -> int:
+    rounds, units = _fight(units, wall)
     return rounds * sum(u.hp for u in units)
 
 
-def _print(units, wall):
-    g = set()
-    e = set()
-    for u in filter(lambda u: u.hp > 0, units):
-        if u.type == 'G':
-            g.add((u.x, u.y))
-        else:
-            e.add((u.x, u.y))
-    for y in range(1, 8):
-        print(*[ '#' if (x, y) in wall else 'G' if (x, y) in g else 'E' if (x, y) in e else '.' for x in range(1, 8) ], sep='')
-
-
-def part2() -> int:
-    pass
-
-
-def _test(filename, result):
-    r = part1(*_parse(filename))
-    try:
-        assert r == result, f'TEST {filename} KO -> {r}'
-        print(f'TEST {filename} OK')
-    except Exception as e:
-        print(e)
+def part2(units: List[Unit], wall: Set[Coord]) -> int:
+    elf_attack_power = 4
+    while True:
+        for u in filter(lambda u: u.type == 'E', units):
+            u.attack_power = elf_attack_power
+        rounds, survivors = _fight(deepcopy(units), wall, True)
+        if rounds is not None:
+            return rounds * sum(s.hp for s in survivors)
+        elf_attack_power += 1
 
 
 def _parse(filename: str) -> Tuple[List[Unit], Set[Coord]]:
@@ -134,14 +127,6 @@ def _parse(filename: str) -> Tuple[List[Unit], Set[Coord]]:
 
 
 if __name__ == '__main__':
-    _test('example27730.txt', 27730)
-    _test('example36334.txt', 36334)
-    _test('example39514.txt', 39514)
-    _test('example27755.txt', 27755)
-    _test('example28944.txt', 28944)
-    _test('example18740.txt', 18740)
     units, wall = _parse('input.txt')
-    r = part1(units, wall)
-    assert r > 220374
-    assert r != 223236
-    print(r)
+    print(part1(deepcopy(units), wall))  # 225096
+    print(part2(units, wall))  # 35354
