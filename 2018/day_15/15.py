@@ -36,7 +36,7 @@ def _adjacent(x: int, y: int) -> Tuple[Coord]:
     return (x, y - 1), (x - 1, y), (x + 1, y), (x, y + 1)
 
 
-def _parse_target(target: Set[Unit], wall: Set[Coord]) -> Dict[Coord, List[Unit]]:
+def _parse_target(target: Set[Unit]) -> Dict[Coord, List[Unit]]:
     target_mapping = defaultdict(list)
     for t in target:
         for x, y in _adjacent(t.x, t.y):
@@ -74,7 +74,7 @@ def _fight(units: List[Unit], wall: Set[Coord], interrupt_on_death: bool=False) 
     while elves and goblins:
         units = _rearrange(units)
         for n, u in ((n, u) for n, u in enumerate(units, 1) if u.hp):
-            target_mapping = _parse_target(goblins if u.type == 'E' else elves, wall)
+            target_mapping = _parse_target(goblins if u.type == 'E' else elves)
             if (u.x, u.y) not in target_mapping:
                 # not in target range
                 others = { other for other in units if (u.x, u.y) != (other.x, other.y) and other.hp }
