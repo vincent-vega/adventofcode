@@ -61,7 +61,5 @@ if __name__ == '__main__':
         draw, _, *boards = f.read().splitlines()
         draw = list(map(int, draw.split(',')))
         boards = _boards(boards)
-    # print(part1(draw, deepcopy(boards)))  # 63552
-    # print(part2(draw, boards))  # 9020
-    assert part1(draw, deepcopy(boards)) == 63552
-    assert part2(draw, boards) == 9020
+    print(part1(draw, deepcopy(boards)))  # 63552
+    print(part2(draw, boards))  # 9020
