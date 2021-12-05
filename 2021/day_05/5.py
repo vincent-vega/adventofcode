@@ -14,7 +14,8 @@ def _expand(line: Line) -> set:
         return { (startX, startY + d) for d in range(endY - startY + 1) }
     elif startY == endY:
         return { (startX + d, startY) for d in range(endX - startX + 1) }
-    return { (startX + step, startY + step * (1 if startY < endY else -1)) for step in range(abs(startY - endY) + 1) }
+    slope = 1 if startY < endY else -1
+    return { (startX + step, startY + step * slope) for step in range(abs(startY - endY) + 1) }
 
 
 def part1(lines: List[Line]) -> int:
