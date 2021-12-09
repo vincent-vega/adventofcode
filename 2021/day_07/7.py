@@ -3,13 +3,15 @@
 
 from functools import lru_cache
 from typing import Callable
+from sys import maxsize
 
 
 def _find_min(crabs: list, cost_func: Callable[[int], int]) -> int:
     m, M = min(crabs), max(crabs)
+    last = maxsize
     for x in range(m, M + 1):
         cost = sum(cost_func(abs(c - x)) for c in crabs)
-        if 'last' in vars() and last < cost:
+        if last < cost:
             return last
         last = cost
 
