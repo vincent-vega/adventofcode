@@ -12,7 +12,7 @@ Smoke flows to the lowest point of the area it's in. For example, consider the f
 98<b>5</b>6789892
 8767896789
 989996<b>5</b>678
-<pre>
+</pre>
 
 Each number corresponds to the height of a particular location, where ``9`` is the highest and ``0`` is the lowest a location can be.
 
