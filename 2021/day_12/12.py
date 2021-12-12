@@ -1,40 +1,36 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from collections import defaultdict, deque
+from collections import defaultdict
 
 
 def part1(cave: dict, small: set) -> int:
     cnt = 0
-    D = deque([([ 'start' ], { 'start' })])
-    while D:
-        path, visited = D.popleft()
-        last = path[-1]
+    Q = [('start', { 'start' })]
+    while Q:
+        last, visited = Q.pop()
         if last == 'end':
             cnt += 1
             continue
         for nxt in filter(lambda x: x not in small or x not in visited, cave[last]):
-            D.append((path + [ nxt ], visited.union({ nxt }) if nxt in small else visited))
+            Q.append((nxt, visited.union({ nxt }) if nxt in small else visited))
     return cnt
 
 
-def _canvisit(visited: dict, small: set, nxt: str) -> bool:
-    return nxt != 'start' and (nxt not in small or nxt not in visited or max(visited.values()) == 1)
+def _canvisit(visited: dict, small: set, nxt: str, visited_twice: bool) -> bool:
+    return nxt != 'start' and (nxt not in small or nxt not in visited or not visited_twice)
 
 
 def part2(cave: dict, small: set) -> int:
     cnt = 0
-    D = deque([([ 'start' ], {})])
-    while D:
-        path, visited = D.popleft()
-        last = path[-1]
+    Q = [('start', set([ 'start' ]), False)]
+    while Q:
+        last, visited, visited_twice = Q.pop()
         if last == 'end':
             cnt += 1
             continue
-        for nxt in filter(lambda x: _canvisit(visited, small, x), cave[last]):
-            if nxt in small:
-                x = { nxt: visited[nxt] + 1 if nxt in visited else 1 }
-            D.append((path + [ nxt ], {**visited, **x} if nxt in small else visited))
+        for nxt in filter(lambda x: _canvisit(visited, small, x, visited_twice), cave[last]):
+            Q.append((nxt, visited.union({ nxt }) if nxt in small else visited, visited_twice or nxt in visited))
     return cnt
 
 
