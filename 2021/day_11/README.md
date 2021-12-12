@@ -50,7 +50,7 @@ After step 2:
 61116
 51115
 45654
-<pre>
+</pre>
 
 An octopus is **highlighted** when it flashed during the given step.
 
