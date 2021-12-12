@@ -44,9 +44,9 @@ def _parse(lines: list) -> (dict, set):
     for i, j in map(lambda s: s.split('-'), lines):
         cave[i].add(j)
         cave[j].add(i)
-        if i not in small and all(c.islower() for c in i):
+        if i not in small and i.islower():
             small.add(i)
-        if j not in small and all(c.islower() for c in j):
+        if j not in small and j.islower():
             small.add(j)
     return cave, small
 
