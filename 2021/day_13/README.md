@@ -119,7 +119,7 @@ The instructions made a square!
 
 The transparent paper is pretty big, so for now, focus on just completing the first fold. After the first fold in the example above, **``17``** dots are visible - dots that end up overlapping after the fold is completed count as a single dot.
 
-**How many dots are visible after completing just the first fold instruction on your transparent paper?**J
+**How many dots are visible after completing just the first fold instruction on your transparent paper?**
 
 
 ### - - - Part Two - - -
