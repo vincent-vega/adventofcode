@@ -4,8 +4,10 @@ You reach another volcanically active part of the cave. It would be nice if you 
 
 Fortunately, the submarine seems to be equipped with a thermal camera! When you activate it, you are greeted with:
 
-``Congratulations on your purchase! To activate this infrared thermal imaging
-camera system, please enter the code found on page 1 of the manual.``
+<pre>
+Congratulations on your purchase! To activate this infrared thermal imaging
+camera system, please enter the code found on page 1 of the manual.
+</pre>
 
 Apparently, the Elves have never used this feature. To your surprise, you manage to find the manual; as you go to open it, page 1 falls out. It's a large sheet of [transparent paper](https://en.wikipedia.org/wiki/Transparency_(projection))! The transparent paper is marked with random dots and includes instructions on how to fold it up (your puzzle input). For example:
 
@@ -119,7 +121,7 @@ The instructions made a square!
 
 The transparent paper is pretty big, so for now, focus on just completing the first fold. After the first fold in the example above, **``17``** dots are visible - dots that end up overlapping after the fold is completed count as a single dot.
 
-**How many dots are visible after completing just the first fold instruction on your transparent paper?**J
+**How many dots are visible after completing just the first fold instruction on your transparent paper?**
 
 
 ### - - - Part Two - - -
