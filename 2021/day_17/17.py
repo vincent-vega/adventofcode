@@ -17,7 +17,7 @@ def _horizontal(target: set) -> dict:
     X = max(hrange)
     for vx in range(X, 0, -1):
         hist = list(range(vx, -1, -1))
-        x_at_step = { (t, x) for t, x in map(lambda t: (t, sum(hist[:t])), range(1, len(hist))) if x in hrange }  # XXX len(hist) + 1?
+        x_at_step = { (t, x) for t, x in map(lambda t: (t, sum(hist[:t])), range(1, len(hist) + 1)) if x in hrange }
         for step, x in x_at_step:
             findings[step].add((vx, x))
     return findings  # steps -> { (vx, finalX) ... }
