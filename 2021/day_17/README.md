@@ -15,7 +15,9 @@ The probe's ``x,y`` position starts at ``0,0``. Then, it will follow some trajec
 
 For the probe to successfully make it into the trench, the probe must be on some trajectory that causes it to be within a **target area** after any step. The submarine computer has already calculated this target area (your puzzle input). For example:
 
-``target area: x=20..30, y=-10..-5``
+<pre>
+target area: x=20..30, y=-10..-5
+</pre>
 
 This target area means that you need to find initial ``x,y`` velocity values such that after any step, the probe's ``x`` position is at least ``20`` and at most ``30``, **and** the probe's ``y`` position is at least ``-10`` and at most ``-5``.
 
