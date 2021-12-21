@@ -114,7 +114,5 @@ def part2(transmission: str) -> int:
 if __name__ == '__main__':
     with open('input.txt') as f:
         transmission = ''.join(bin(int(h, 16))[2:].zfill(4) for h in f.read().strip())
-    # print(part1(transmission))  # 893
-    # print(part2(transmission))  # 4358595186090
-    assert part1(transmission) == 893
-    assert part2(transmission) == 4358595186090
+    print(part1(transmission))  # 893
+    print(part2(transmission))  # 4358595186090
