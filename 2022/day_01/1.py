@@ -15,6 +15,6 @@ def _parse(elf: str) -> list:
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        values = [ _parse(e.strip()) for e in f.read().split('\n\n') ]
+        values = [ _parse(e) for e in f.read().split('\n\n') ]
     print(part1(values))  # 67450
     print(part2(values))  # 199357
