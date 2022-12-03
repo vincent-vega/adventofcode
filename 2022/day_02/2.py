@@ -28,7 +28,7 @@ strategy2 = {
     'B': {  # paper
         'X': 1,  # lose
         'Y': 3 + 2,  # draw
-        'Z': 6 + 3  # wi
+        'Z': 6 + 3  # win
     },
     'C': {  # scissor
         'X': 2,  # lose
