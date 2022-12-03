@@ -6,7 +6,7 @@ def _priority(item: str) -> int:
 
 
 def part1(rucksacks: list[str]) -> int:
-    rucksacks = [ (set(r[:int(len(r) / 2)]), set(r[int(len(r) / 2):])) for r in rucksacks ]
+    rucksacks = [ (set(r[:len(r) // 2]), set(r[len(r) // 2:])) for r in rucksacks ]
     return sum(_priority(b1.intersection(b2).pop()) for b1, b2 in rucksacks)
 
 
