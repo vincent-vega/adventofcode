@@ -2,11 +2,11 @@
 # -*- coding: utf-8 -*-
 
 def part1(pairs: list[tuple[set]]) -> int:
-    return sum(1 for s1, s2 in pairs if len(s1.intersection(s2)) in { len(s1), len(s2) })
+    return sum(1 for s1, s2 in pairs if len(s1 & s2) in { len(s1), len(s2) })
 
 
 def part2(pairs: list[tuple[set]]) -> int:
-    return sum(1 for p1, p2 in pairs if p1.intersection(p2))
+    return sum(1 for p1, p2 in pairs if p1 & p2)
 
 
 def _extend(section: str) -> set[int]:
