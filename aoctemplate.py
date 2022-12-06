@@ -18,7 +18,7 @@ def _input(year, day):
         return
     url = f'https://adventofcode.com/{year}/day/{day}/input'
     print(f'Downloading input file @ {url}')
-    r = requests.get(url, cookies=dict(session=''))
+    r = requests.get(url, cookies=dict(session=f'{os.environ["AOC_SESSION"]}'))
     if r.status_code > 200:
         raise Exception('Unable to download the input file', r.reason)
     with open('input.txt', 'w') as f:
