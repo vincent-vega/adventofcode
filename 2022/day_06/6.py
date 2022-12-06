@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+def _detect(signal: str, n: int) -> int:
+    for idx in range(4, len(signal)):
+        if len(set(signal[idx - n:idx])) == n:
+            return idx
+
+
 def part1(signal: str) -> int:
-    for idx in range(len(signal) - 4):
-        if len(set(signal[idx:idx + 4])) == 4:
-            return idx + 4
+    return _detect(signal, 4)
 
 
 def part2(signal: str) -> int:
-    for idx in range(len(signal) - 14):
-        if len(set(signal[idx:idx + 14])) == 14:
-            return idx + 14
+    return _detect(signal, 14)
 
 
 if __name__ == '__main__':
