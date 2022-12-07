@@ -31,6 +31,6 @@ def part2(numplayers: int, nummarbles: int) -> int:
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        players, marbles = map(int, re.findall(f'\d+', f.read()))
+        players, marbles = map(int, re.findall(r'\d+', f.read()))
         print(part1(players, marbles))  # 404502
         print(part2(players, marbles * 100))  # 3243916887

@@ -21,7 +21,7 @@ def part2(crates: list[list[str]], procedure: list[list[int]]) -> str:
 if __name__ == '__main__':
     with open('input.txt') as f:
         status, procedure = [ chunk.split('\n') for chunk in f.read().split('\n\n') ]
-        procedure = list(map(lambda p: list(map(int, re.findall('\\d+', p))), procedure[:-1]))
+        procedure = list(map(lambda p: list(map(int, re.findall(r'\d+', p))), procedure[:-1]))
         size = int(status[-1].strip()[-1])
         crates = [ [] for _ in range(size) ]
         for s in status[:-1]:
