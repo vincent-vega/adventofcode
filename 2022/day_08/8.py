@@ -15,8 +15,8 @@ def _visible(grid: dict, x: int, y: int, X: int, Y: int) -> bool:
 
 
 def part1(grid: dict) -> int:
-    X = max(grid, key=lambda x: x[0])[0]
-    Y = max(grid, key=lambda x: x[1])[1]
+    X, _ = max(grid, key=lambda x: x[0])
+    _, Y = max(grid, key=lambda x: x[1])
     edge = 2 * (X + 1) + 2 * (Y + 1) - 4
     return edge + sum(1 for x in range(1, X) for y in range(1, Y) if _visible(grid, x, y, X, Y))
 
@@ -38,8 +38,8 @@ def _score(grid: dict, x: int, y: int, X: int, Y: int) -> int:
 
 
 def part2(grid: dict) -> int:
-    X = max(grid, key=lambda x: x[0])[0]
-    Y = max(grid, key=lambda x: x[1])[1]
+    X, _ = max(grid, key=lambda x: x[0])
+    _, Y = max(grid, key=lambda x: x[1])
     return max(_score(grid, x, y, X, Y) for x in range(1, X) for y in range(1, Y))
 
 
