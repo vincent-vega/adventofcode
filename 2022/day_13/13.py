@@ -41,10 +41,7 @@ def _parse(value: str, start: int) -> (list, int):
             packet.append(v)
         elif value[end] == ']':
             return packet, end + 1
-        elif value[end] == ',':
-            end += 1
-            continue
-        else:
+        elif value[end] != ',':
             for e in range(end + 1, len(value)):
                 if value[e] in ',]' and e > end:
                     packet.append(int(value[end:e]))
