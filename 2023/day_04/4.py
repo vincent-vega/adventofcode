@@ -5,8 +5,7 @@ import re
 
 
 def _score(card: (set[int], set[int])) -> int:
-    n = len(card[0].intersection(card[1]))
-    return 0 if n == 0 else 2 ** (n - 1)
+    return int(2 ** (len(card[0].intersection(card[1])) - 1))
 
 
 def part1(cards: list[tuple[set[int], set[int]]]) -> int:
