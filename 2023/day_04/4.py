@@ -5,7 +5,7 @@ import re
 
 
 def _score(card: (set[int], set[int])) -> int:
-    n = sum(1 for v in card[0] if v in card[1])
+    n = len(card[0].intersection(card[1]))
     return 0 if n == 0 else 2 ** (n - 1)
 
 
@@ -15,7 +15,7 @@ def part1(cards: list[tuple[set[int], set[int]]]) -> int:
 
 def part2(cards: dict[int, tuple[tuple[set[int], set[int]], int]]) -> int:
     for n, (card, count) in cards.items():
-        win = sum(1 for v in card[0] if v in card[1])
+        win = len(card[0].intersection(card[1]))
         for i in filter(lambda i: i in cards, range(n + 1, n + win + 1)):
             card, cnt = cards[i]
             cards[i] = (card, cnt + count)
