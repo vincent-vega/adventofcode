@@ -30,7 +30,7 @@ def _cc(n: int, mapping: list[tuple[int]]) -> int:
 
 
 def part2(seed: tuple[int], soil: list[tuple[int]], fertilizer: list[tuple[int]], water: list[tuple[int]], light: list[tuple[int]], temperature: list[tuple[int]], humidity: list[tuple[int]], location: list[tuple[int]]) -> int:
-    seed = list((seed[i], seed[i + 1]) for i in range(0, len(seed) - 1, 2))
+    seed = [ (seed[i], seed[i + 1]) for i in range(0, len(seed) - 1, 2) ]
     for dest, src, count in sorted(location, key=lambda x: x[0]):
         for i in range(count):
             n = src + i
