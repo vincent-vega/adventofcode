@@ -8,7 +8,7 @@ def _nxt(values: tuple[int]) -> tuple[int]:
     return tuple(values[i + 1] - values[i] for i in range(len(values) - 1))
 
 
-def _seq(values: tuple[int]) -> list[tuple[int]]:
+def _seq(values: tuple[int], first: bool = False) -> tuple[int]:
     sequence = [ tuple(values) ]
     while True:
         nxt = _nxt(values)
@@ -18,12 +18,12 @@ def _seq(values: tuple[int]) -> list[tuple[int]]:
             break
         sequence.append(nxt)
         values = nxt
-    return sequence
+    return tuple(s[0] if first else s[-1] for s in sequence)
 
 
-def _predict1(sequence: list[tuple[int]], diff: int = 0) -> int:
+def _predict1(sequence: tuple[int], diff: int = 0) -> int:
     for i in range(len(sequence) - 1, -1, -1):
-        diff += sequence[i][-1]
+        diff += sequence[i]
     return diff
 
 
@@ -31,14 +31,14 @@ def part1(history: tuple[tuple[int]]) -> int:
     return sum(_predict1(_seq(h)) for h in history)
 
 
-def _predict2(sequence: list[tuple[int]], diff: int = 0) -> int:
+def _predict2(sequence: tuple[int], diff: int = 0) -> int:
     for i in range(len(sequence) - 1, -1, -1):
-        diff = sequence[i][0] - diff
+        diff = sequence[i] - diff
     return diff
 
 
 def part2(history: tuple[tuple[int]]) -> int:
-    return sum(_predict2(_seq(h)) for h in history)
+    return sum(_predict2(_seq(h, True)) for h in history)
 
 
 if __name__ == '__main__':
