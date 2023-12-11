@@ -13,9 +13,7 @@ def _navigate(pipe: dict[tuple[int], list[tuple[int]]], cur: (int, int), end: (i
         edge1, edge2 = pipe[cur]
         if last != edge1 and last != edge2:
             return None
-        tmp = cur
-        cur = edge1 if edge2 == last else edge2
-        last = tmp
+        cur, last = edge1 if edge2 == last else edge2, cur
         nodes.add(cur)
     return nodes
 
