@@ -10,17 +10,22 @@ def _load(rounded: dict[int, set[int]]) -> int:
 
 
 def _tilt(rounded: dict[int, set[int]], cubes: dict[int, set[int]], limit: int, reverse: bool = True) -> dict[int, set[int]]:
-    R = sorted(rounded, reverse=reverse)
-    for j in R:
+    for j in sorted(rounded, reverse=reverse):
         for i in set(rounded[j]):
             if reverse:
-                J1 = [ jj for jj in cubes if jj > j and i in cubes[jj] ]
-                J2 = [ jj for jj in rounded if jj > j and i in rounded[jj] ]
-                J = limit if not J1 and not J2 else min(J1 + J2) - 1
+                for jj in range(j + 1, limit + 1):
+                    if i in cubes[jj] or i in rounded[jj]:
+                        J = jj - 1
+                        break
+                else:
+                    J = limit
             else:
-                J1 = [ jj for jj in cubes if jj < j and i in cubes[jj] ]
-                J2 = [ jj for jj in rounded if jj < j and i in rounded[jj] ]
-                J = limit if not J1 and not J2 else max(J1 + J2) + 1
+                for jj in range(j - 1, limit - 1, -1):
+                    if i in cubes[jj] or i in rounded[jj]:
+                        J = jj + 1
+                        break
+                else:
+                    J = limit
             if J != j:
                 rounded[j].remove(i)
                 rounded[J].add(i)
