@@ -4,20 +4,20 @@
 def _move(x: int, y: int, direction: int) -> (int, int):
     match direction:
         case 0:  # UP
-            return (x, y - 1)
+            return x, y - 1
         case 1:  # RIGHT
-            return (x + 1, y)
+            return x + 1, y
         case 2:  # DOWN
-            return (x, y + 1)
+            return x, y + 1
         case 3:  # LEFT
-            return (x - 1, y)
+            return x - 1, y
 
 
 def _turn(direction: int) -> int:
     return (direction + 1) % 4
 
 
-def part1(obstacles: set[(int, int)], limit: (int, int), guard: (int, int)) -> int:
+def _walk(obstacles: set[(int, int)], limit: (int, int), guard: (int, int)) -> set((int, int)):
     X, Y = limit
     gx, gy = guard
     direction = 0
@@ -27,12 +27,16 @@ def part1(obstacles: set[(int, int)], limit: (int, int), guard: (int, int)) -> i
         while (nxt := _move(gx, gy, direction)) in obstacles:
             direction = _turn(direction)
         gx, gy = nxt
-    return len(visited)
+    return visited
+
+
+def part1(obstacles: set[(int, int)], limit: (int, int), guard: (int, int)) -> int:
+    return len(_walk(obstacles, limit, guard))
 
 
 def part2(obstacles: set[(int, int)], limit: (int, int), guard: (int, int)) -> int:
     X, Y = limit
-    obstructions = { (ox, oy) for ox in range(X + 1) for oy in range(Y + 1) if (ox, oy) not in obstacles and (ox, oy) != guard }
+    obstructions = { (ox, oy) for ox, oy in _walk(obstacles, limit, guard) if (ox, oy) != guard }
     loops = 0
     for o in obstructions:
         mod_obstacles = obstacles.union({o})
