@@ -2,11 +2,8 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict
+from common.lib import _manhattan
 from itertools import combinations
-
-
-def _manh(a: tuple[int, int], b: tuple[int, int]) -> int:
-    return sum(abs(i - j) for i, j in zip(a, b))
 
 
 def _aligned(a: tuple[int, int], b: tuple[int, int], c: tuple[int, int]) -> bool:
@@ -25,7 +22,7 @@ def _antinodes(antennas: dict[str, set[tuple[int, int]]], limit: tuple[int, int]
             for y in filter(lambda y: (x, y) not in antinodes, range(Y + 1)):
                 for c1, c2 in couples:
                     if _aligned((x, y), c1, c2):
-                        if res_harm or _manh((x, y), c1) == 2 * _manh((x, y), c2) or 2 * _manh((x, y), c1) == _manh((x, y), c2):
+                        if res_harm or _manhattan(x, y, *c1) == 2 * _manhattan(x, y, *c2) or 2 * _manhattan(x, y, *c1) == _manhattan(x, y, *c2):
                             antinodes.add((x, y))
     return antinodes
 
