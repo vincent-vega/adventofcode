@@ -17,23 +17,14 @@ class File:
     length: int
 
 
-def _defrag(disk: dict[int, int], freespace: list[int]) -> tuple[dict[int, int], list[int]]:
-    freed = []
-    used = [ k for k, v in disk.items() if v is not None ]
-    while freespace:
-        idx = freespace.pop()
-        M = used.pop()
-        if M < idx:
-            break
-        disk[idx] = disk[M]
-        disk[M] = None
-        freed.append(M)
-    return disk, freed
-
-
 def part1(disk: dict[int, int], freespace: list[int]) -> int:
-    while max(k for k, v in disk.items() if v is not None) > freespace[-1]:
-        disk, freespace = _defrag(disk, freespace)
+    used = [ k for k, v in disk.items() if v is not None ]
+    while freespace and used:
+        idx = freespace.pop()
+        if (cur := used.pop()) < idx:
+            break
+        disk[idx] = disk[cur]
+        disk[cur] = None
     return sum(k * v for k, v in disk.items() if v)
 
 
@@ -48,7 +39,6 @@ def part2(disk: dict[int, int], files: dict[int, File], free_sectors: list[FreeS
                 free.length -= file.length
                 free.start += file.length
                 break
-
     return sum(k * v for k, v in disk.items() if v)
 
 
