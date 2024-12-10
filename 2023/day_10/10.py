@@ -4,7 +4,7 @@
 from collections import defaultdict
 
 
-def _navigate(pipe: dict[tuple[int], list[tuple[int]]], cur: (int, int), end: (int, int)) -> set[tuple[int]]:
+def _navigate(pipe: dict[tuple[int], list[tuple[int]]], cur: tuple[int, int], end: tuple[int, int]) -> set[tuple[int]]:
     last = end
     nodes = set([ cur ])
     while cur != end:

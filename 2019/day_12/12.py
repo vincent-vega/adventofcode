@@ -44,7 +44,7 @@ def _run(moons: list):
 
 
 def _gravities(m1: 'Moon', m2: 'Moon') -> list:
-    def _pull(x: (int, int)) -> int:
+    def _pull(x: tuple[int, int]) -> int:
         return 1 if x[1] > x[0] else -1 if x[1] < x[0] else 0
     g1 = [ _pull(x) for x in zip(m1.location(), m2.location()) ]
     return g1, [ -1 * x for x in g1 ]

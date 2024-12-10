@@ -13,7 +13,7 @@ def _count_hashtags(world: dict, monsters: list) -> int:
     return sum(1 for coord in world if coord not in skip)
 
 
-def _monster_vertex(coord: (int, int)) -> list:
+def _monster_vertex(coord: tuple[int, int]) -> list:
     x, y = coord
     return [ (x + dx, y + dy) for dx, dy in _monster_vertex_delta() ]
 
@@ -34,7 +34,7 @@ def _find_monsters(world: dict) -> list:
     return [ (x, y) for y in range(Y - 2) for x in range(X - 18) if _monster_present(world, (x, y)) ]
 
 
-def _monster_present(world: dict, top_left_coord: (int, int)) -> bool:
+def _monster_present(world: dict, top_left_coord: tuple[int, int]) -> bool:
     return all((x, y) in world for x, y in _monster_vertex(top_left_coord))
 
 

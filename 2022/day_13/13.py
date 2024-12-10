@@ -2,10 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from functools import cmp_to_key
-from typing import Union
 
 
-def _lt(p1: Union[int, list], p2: Union[int, list]) -> int:
+def _lt(p1: int | list, p2: int | list) -> int:
     for idx in range(max(len(p1), len(p2))):
         if idx == len(p1):
             return -1

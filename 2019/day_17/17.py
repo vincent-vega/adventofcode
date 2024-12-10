@@ -21,7 +21,7 @@ def part1(program: list) -> int:
         Intcode.run(state)
     M = _parse([ chr(x) for x in state.output ])
 
-    def _is_xsection(coord: (int, int)) -> bool:
+    def _is_xsection(coord: tuple[int, int]) -> bool:
         x, y = coord
         return (x, y - 1) in M and (x, y + 1) in M and (x - 1, y) in M and (x + 1, y) in M
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-def _move(x: int, y: int, direction: int) -> (int, int):
+def _move(x: int, y: int, direction: int) -> tuple[int, int]:
     match direction:
         case 0:  # UP
             return x, y - 1
@@ -17,7 +17,7 @@ def _turn(direction: int) -> int:
     return (direction + 1) % 4
 
 
-def _walk(obstacles: set[(int, int)], limit: (int, int), guard: (int, int)) -> set((int, int)):
+def _walk(obstacles: set[tuple[int, int]], limit: tuple[int, int], guard: tuple[int, int]) -> set[tuple[int, int]]:
     X, Y = limit
     gx, gy = guard
     direction = 0
@@ -30,11 +30,11 @@ def _walk(obstacles: set[(int, int)], limit: (int, int), guard: (int, int)) -> s
     return visited
 
 
-def part1(obstacles: set[(int, int)], limit: (int, int), guard: (int, int)) -> int:
+def part1(obstacles: set[tuple[int, int]], limit: tuple[int, int], guard: tuple[int, int]) -> int:
     return len(_walk(obstacles, limit, guard))
 
 
-def part2(obstacles: set[(int, int)], limit: (int, int), guard: (int, int)) -> int:
+def part2(obstacles: set[tuple[int, int]], limit: tuple[int, int], guard: tuple[int, int]) -> int:
     X, Y = limit
     obstructions = { (ox, oy) for ox, oy in _walk(obstacles, limit, guard) if (ox, oy) != guard }
     loops = 0

@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from functools import lru_cache
+from functools import cache
 
 
-@lru_cache(maxsize=None)
-def _nxt(cur: int, depth: int, step: int) -> (int, int):
+@cache
+def _nxt(cur: int, depth: int, step: int) -> tuple[int, int]:
     if cur == 0 and step == -1:
         return 1, 1
     elif cur == depth - 1 and step == 1:
@@ -21,7 +21,7 @@ def _move_scanner(firewall: dict) -> dict:
     return firewall
 
 
-def _cross(firewall: dict, wait: int=0) -> int:
+def _cross(firewall: dict, wait: int = 0) -> int:
     for _ in range(wait):
         firewall = _move_scanner(firewall)
     cnt = -1
@@ -41,7 +41,7 @@ def part1(firewall: dict) -> int:
     return max(cnt, 0)
 
 
-@lru_cache(maxsize=None)
+@cache
 def _caught(cur: int, depth: int, step: int, delta: int) -> bool:
     for _ in range(delta):
         cur, step = _nxt(cur, depth, step)
@@ -64,7 +64,7 @@ def part2(firewall: dict) -> int:
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        layers = { k: v for k, v in map(lambda l: map(int, l.split(': ')), f.read().splitlines()) }
+        layers = { k: v for k, v in map(lambda line: map(int, line.split(': ')), f.read().splitlines()) }
     firewall = { n: (0, layers[n], 1) if n in layers else None for n in range(max(layers.keys()) + 1) }
     print(part1(firewall))  # 1904
     print(part2(firewall))  # 3833504

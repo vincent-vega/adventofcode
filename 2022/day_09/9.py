@@ -1,19 +1,19 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-def _move(start: (int, int), delta: (int, int)) -> (int, int):
+def _move(start: tuple[int, int], delta: tuple[int, int]) -> tuple[int, int]:
     x, y = start
     dx, dy = delta
     return (x + dx, y + dy)
 
 
-def _stay(k1: (int, int), k2: (int, int)) -> bool:
+def _stay(k1: tuple[int, int], k2: tuple[int, int]) -> bool:
     x1, y1 = k1
     x2, y2 = k2
     return max(abs(x2 - x1), abs(y2 - y1)) < 2  # Chebyshev distance
 
 
-def _tail_seen(motions: ((int, int), int), length: int) -> set[(int, int)]:
+def _tail_seen(motions: tuple[tuple[int, int], int], length: int) -> set[tuple[int, int]]:
     knots = [ (0, 0) ] * length
     seen = { (0, 0) }
     for delta, steps in motions:
@@ -36,11 +36,11 @@ def _tail_seen(motions: ((int, int), int), length: int) -> set[(int, int)]:
     return seen
 
 
-def part1(motions: ((int, int), int)) -> int:
+def part1(motions: tuple[tuple[int, int], int]) -> int:
     return len(_tail_seen(motions, 2))
 
 
-def part2(motions: ((int, int), int)) -> int:
+def part2(motions: tuple[tuple[int, int], int]) -> int:
     return len(_tail_seen(motions, 10))
 
 

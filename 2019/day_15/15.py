@@ -36,7 +36,7 @@ def _move(state: Intcode_State) -> int:
     return None
 
 
-def _next_coord(coord: (int, int), mov: int) -> (int, int):
+def _next_coord(coord: tuple[int, int], mov: int) -> tuple[int, int]:
     x, y = coord
     if mov == 1:
         y += 1
@@ -65,7 +65,7 @@ def part2(program: list) -> int:
     return minutes
 
 
-def _get_adjacent(coord: (int, int)) -> list:
+def _get_adjacent(coord: tuple[int, int]) -> list:
     x, y = coord
     return [ (x - 1, y), (x + 1, y), (x, y - 1), (x, y + 1) ]
 
@@ -74,10 +74,10 @@ class Map:
     def __init__(self):
         self.coordinates = set()
 
-    def set_oxy_location(self, oxy_location: (int, int)):
+    def set_oxy_location(self, oxy_location: tuple[int, int]):
         self.oxy_location = oxy_location
 
-    def add_coord(self, coord: (int, int)):
+    def add_coord(self, coord: tuple[int, int]):
         self.coordinates.add(coord)
 
 

@@ -39,7 +39,7 @@ def _is_door(char: str) -> bool:
     return re.match(r'[A-Z]', char)
 
 
-def _get_adj_coord(coord: (int, int)) -> tuple:
+def _get_adj_coord(coord: tuple[int, int]) -> tuple:
     x, y = coord
     return (x, y - 1), (x, y + 1), (x - 1, y), (x + 1, y)
 

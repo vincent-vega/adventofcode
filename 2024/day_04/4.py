@@ -6,7 +6,7 @@ from collections import defaultdict
 WORD = 'XMAS'
 
 
-def _check_cross(words: dict[str, set[tuple[int, int]]], start: (int, int), orientation: int) -> bool:
+def _check_cross(words: dict[str, set[tuple[int, int]]], start: tuple[int, int], orientation: int) -> bool:
     x, y = start
     for c in WORD:
         if (x, y) not in words[c]:
@@ -18,7 +18,7 @@ def _check_cross(words: dict[str, set[tuple[int, int]]], start: (int, int), orie
     return True
 
 
-def _check_diag(words: dict[str, set[tuple[int, int]]], start: (int, int), orientation: int) -> bool:
+def _check_diag(words: dict[str, set[tuple[int, int]]], start: tuple[int, int], orientation: int) -> bool:
     x, y = start
     for c in WORD:
         if (x, y) not in words[c]:
@@ -36,7 +36,7 @@ def part1(words: dict[str, set[tuple[int, int]]]) -> int:
     return count
 
 
-def _check_x_mas(words: dict[str, set[tuple[int, int]]], center: (int, int), orientation: int) -> bool:
+def _check_x_mas(words: dict[str, set[tuple[int, int]]], center: tuple[int, int], orientation: int) -> bool:
     x, y = center
     match orientation:
         case 0:

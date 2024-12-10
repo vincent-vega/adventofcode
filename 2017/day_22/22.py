@@ -7,29 +7,29 @@ from math import ceil
 # state:     0 clean; 1 weakened; 2 infected; 3 flagged
 
 
-def _forward(cur: (int, int), direction: int) -> (int, int):
+def _forward(cur: tuple[int, int], direction: int) -> tuple[int, int]:
     x, y = cur
     x += -1 if direction == 3 else 1 if direction == 1 else 0
     y += -1 if direction == 0 else 1 if direction == 2 else 0
     return x, y
 
 
-def _left(cur: (int, int), direction: int) -> ((int, int), int):
+def _left(cur: tuple[int, int], direction: int) -> tuple[tuple[int, int], int]:
     direction = (direction - 1) % 4
     return _forward(cur, direction), direction
 
 
-def _right(cur: (int, int), direction: int) -> ((int, int), int):
+def _right(cur: tuple[int, int], direction: int) -> tuple[tuple[int, int], int]:
     direction = (direction + 1) % 4
     return _forward(cur, direction), direction
 
 
-def _reverse(cur: (int, int), direction: int) -> ((int, int), int):
+def _reverse(cur: tuple[int, int], direction: int) -> tuple[tuple[int, int], int]:
     direction = (direction + 2) % 4
     return _forward(cur, direction), direction
 
 
-def part1(grid: set, cur: (int, int), cnt: int) -> int:
+def part1(grid: set, cur: tuple[int, int], cnt: int) -> int:
     infected = 0
     cur_dir = 0
     for _ in range(cnt):
@@ -43,7 +43,7 @@ def part1(grid: set, cur: (int, int), cnt: int) -> int:
     return infected
 
 
-def part2(grid: dict, cur: (int, int), cnt: int) -> int:
+def part2(grid: dict, cur: tuple[int, int], cnt: int) -> int:
     infected = 0
     cur_dir = 0
     for _ in range(cnt):

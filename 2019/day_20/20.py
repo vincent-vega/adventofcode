@@ -19,7 +19,7 @@ def part1(M: dict) -> int:
     return -1  # Not found
 
 
-def _get_adjacent(coord: (int, int), M: dict) -> list:
+def _get_adjacent(coord: tuple[int, int], M: dict) -> list:
     x, y = coord
     adj = [ (x + dx, y + dy) for dx, dy in [ (-1, 0), (1, 0), (0, -1), (0, 1) ] if M.get((x + dx, y + dy)) is not None ]
     if isinstance(M[coord], tuple):
@@ -47,7 +47,7 @@ def part2(M: dict) -> int:
     return -1  # Not found
 
 
-def _get_adjacent2(coord: (int, int), M: dict, max_size: (int, int), cur_lev: int) -> list:
+def _get_adjacent2(coord: tuple[int, int], M: dict, max_size: tuple[int, int], cur_lev: int) -> list:
     x, y = coord
     adj = [ (cur_lev, x + dx, y + dy) for dx, dy in [ (-1, 0), (1, 0), (0, -1), (0, 1) ] if M.get((x + dx, y + dy)) is not None ]
     if isinstance(M[coord], tuple):
@@ -57,13 +57,13 @@ def _get_adjacent2(coord: (int, int), M: dict, max_size: (int, int), cur_lev: in
     return adj
 
 
-def _is_outer_gate(gate: (int, int), max_size: (int, int)) -> bool:
+def _is_outer_gate(gate: tuple[int, int], max_size: tuple[int, int]) -> bool:
     max_x, max_y = max_size
     gate_x, gate_y = gate
     return gate_x == 2 or gate_x == max_x or gate_y == 2 or gate_y == max_y
 
 
-def _get_h_adjacent(coord: (int, int)) -> tuple:
+def _get_h_adjacent(coord: tuple[int, int]) -> tuple:
     x, y = coord
     return (x - 1, y), (x + 1, y)
 

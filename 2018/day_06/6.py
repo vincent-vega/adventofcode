@@ -4,11 +4,11 @@
 import re
 
 
-def _manhattan(a: (int, int), b: (int, int)) -> int:
+def _manhattan(a: tuple[int, int], b: tuple[int, int]) -> int:
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
-def _closest(locations: dict, target: (int, int)) -> int:
+def _closest(locations: dict, target: tuple[int, int]) -> int:
     min_distance = min_name = None
     for n, coordinate in locations.items():
         if coordinate == target:
@@ -22,7 +22,7 @@ def _closest(locations: dict, target: (int, int)) -> int:
     return min_name
 
 
-def part1(locations: dict, top_left: (int, int), bottom_right: (int, int)) -> int:
+def part1(locations: dict, top_left: tuple[int, int], bottom_right: tuple[int, int]) -> int:
     min_X, min_Y = top_left
     max_X, max_Y = bottom_right
     counter = { n: 0 for n in range(len(locations)) }
@@ -38,11 +38,11 @@ def part1(locations: dict, top_left: (int, int), bottom_right: (int, int)) -> in
     return max(counter.values())
 
 
-def _sum_distance(locations: dict, target: (int, int)) -> int:
+def _sum_distance(locations: dict, target: tuple[int, int]) -> int:
     return sum(_manhattan(coordinate, target) for coordinate in locations.values())
 
 
-def part2(locations: dict, top_left: (int, int), bottom_right: (int, int), max_distance: int) -> int:
+def part2(locations: dict, top_left: tuple[int, int], bottom_right: tuple[int, int], max_distance: int) -> int:
     min_X, min_Y = top_left
     max_X, max_Y = bottom_right
     return sum([ 1 for x in range(min_X, max_X + 1) for y in range(min_Y, max_Y + 1) if _sum_distance(locations, (x, y)) < max_distance ])

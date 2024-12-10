@@ -5,7 +5,7 @@ from collections import defaultdict
 from intcode import Intcode, Intcode_State
 
 
-def _rotate(current_coord: (int, int), current_dir: str, operation: int) -> ((int, int), str):
+def _rotate(current_coord: tuple[int, int], current_dir: str, operation: int) -> ((int, int), str):
     LEFT_90 = 0  # RIGHT_90 = 1
     x_offs = y_offs = 0
     if current_dir == '^':

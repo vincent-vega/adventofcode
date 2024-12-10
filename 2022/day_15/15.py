@@ -8,7 +8,7 @@ def _manh(x1: int, y1: int, x2: int, y2: int) -> int:
     return abs(x1 - x2) + abs(y1 - y2)
 
 
-def part1(positions: (int, int, int, int), row: int) -> int:
+def part1(positions: tuple[int, int, int, int], row: int) -> int:
     locations = set()
     others = set()
     for sx, sy, bx, by in positions:
@@ -22,7 +22,7 @@ def part1(positions: (int, int, int, int), row: int) -> int:
     return len(locations - others)
 
 
-def _out_of_scope(sx: int, sy: int, bx: int, by: int, M: int) -> set[(int, int)]:
+def _out_of_scope(sx: int, sy: int, bx: int, by: int, M: int) -> set[tuple[int, int]]:
     '''
     Return every position whose distance from the sensor is radius + 1
     '''
@@ -41,7 +41,7 @@ def _out_of_scope(sx: int, sy: int, bx: int, by: int, M: int) -> set[(int, int)]
     return p
 
 
-def part2(positions: (int, int, int, int), M: int) -> int:
+def part2(positions: tuple[int, int, int, int], M: int) -> int:
     for i, (sx1, sy1, bx1, by1) in enumerate(positions):
         for x, y in _out_of_scope(sx1, sy1, bx1, by1, M):
             for _, (sx2, sy2, bx2, by2) in filter(lambda e: e[0] != i, enumerate(positions)):

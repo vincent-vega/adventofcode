@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from functools import lru_cache
+from functools import cache
 from collections import Counter, namedtuple
 import re
 
@@ -13,8 +13,8 @@ def _parse(data: list) -> Particle:
     return Particle((x, y, z), (vx, vy, vz), (ax, ay, az))
 
 
-@lru_cache(maxsize=None)
-def _intensity(vector: (int, int, int)) -> int:
+@cache
+def _intensity(vector: tuple[int, int, int]) -> int:
     return sum(map(lambda x: x * x, vector))
 
 
@@ -55,8 +55,8 @@ def _prune_collisions(tracked: dict) -> dict:
     return { n: (p, d) for n, (p, d) in tracked.items() if c[p.position] == 1 }
 
 
-@lru_cache(maxsize=None)
-def _coherent(vector1: (int, int, int), vector2: (int, int, int)) -> bool:
+@cache
+def _coherent(vector1: tuple[int, int, int], vector2: tuple[int, int, int]) -> bool:
     return all([ j * k >= 0 for j, k in zip(vector1, vector2) ])  # every velocity component has the same sign of the corresponding acceleration one
 
 
@@ -76,6 +76,6 @@ def part2(particles: list) -> int:
 
 if __name__ == '__main__':
     with open('input.txt') as f:
-        particles = [ _parse(map(int, re.findall('-?\\d+', l))) for l in f.read().splitlines() ]
+        particles = [ _parse(map(int, re.findall('-?\\d+', line))) for line in f.read().splitlines() ]
     print(part1(particles))  # 144
     print(part2(particles))  # 477

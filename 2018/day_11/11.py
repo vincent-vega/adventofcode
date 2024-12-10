@@ -8,7 +8,7 @@ def _power_level(x: int, y: int, serial: int) -> int:
     return 0 if digits < 100 else int(str(digits)[-3]) - 5
 
 
-def _square_power(grid: dict, top_left: (int, int), square_size: int) -> int:
+def _square_power(grid: dict, top_left: tuple[int, int], square_size: int) -> int:
     X, Y = top_left
     return sum(grid[x, y] for y in range(Y, Y + square_size) for x in range(X, X + square_size))
 

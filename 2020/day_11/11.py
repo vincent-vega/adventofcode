@@ -18,7 +18,7 @@ def _update_ferry(ferry: dict, topography: dict, limit: int) -> dict:
     return { coord: _update_seat(ferry[coord], len(_count_occupied(ferry, topography[coord])), limit) for coord in ferry.keys() }
 
 
-def _visible_from(ferry: dict, coord: (int, int), X: int, Y: int) -> list:
+def _visible_from(ferry: dict, coord: tuple[int, int], X: int, Y: int) -> list:
     x, y = coord
     v = []
     # top
@@ -80,9 +80,9 @@ def _visible(ferry: dict) -> dict:
     return { k: _visible_from(ferry, k, X, Y) for k in ferry.keys() }
 
 
-def _adj_from(ferry: dict, coord: (int, int), X: int, Y: int) -> list:
+def _adj_from(ferry: dict, coord: tuple[int, int], X: int, Y: int) -> list:
 
-    def _valid(coord: (int, int), delta: (int, int)) -> bool:
+    def _valid(coord: tuple[int, int], delta: tuple[int, int]) -> bool:
         if delta == (0, 0):
             return False
         if x < 0 or y < 0:

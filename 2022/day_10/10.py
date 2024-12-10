@@ -16,13 +16,13 @@ def part1(instructions: list[int]) -> int:
     return strenght
 
 
-def _move(cur: (int, int)) -> (int, int):
+def _move(cur: tuple[int, int]) -> tuple[int, int]:
     cur_x, cur_y = cur
     cur_x = (cur_x + 1) % 40
     return cur_x, (cur_y + 1) % 6 if cur_x == 0 else cur_y
 
 
-def _update(screen: set[int, int], cur: (int, int), X: int):
+def _update(screen: set[int, int], cur: tuple[int, int], X: int):
     x, y = cur
     if x in { X - 1, X, X + 1}:
         screen.add((x, y))

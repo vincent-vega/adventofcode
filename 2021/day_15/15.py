@@ -8,7 +8,7 @@ def _adj(x: int, y: int) -> set:
     return { (x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1) }
 
 
-def _valid(current: (int, int), bottom_right: (int, int)) -> bool:
+def _valid(current: tuple[int, int], bottom_right: tuple[int, int]) -> bool:
     x, y = current
     X, Y = bottom_right
     return X >= x >= 0 <= y <= Y

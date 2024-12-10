@@ -4,11 +4,11 @@
 from collections import defaultdict
 
 ROCKS = [
-    { 2, 3, 4, 5 },
-    { 3, 2 + 1j, 3 + 1j, 4 + 1j, 3 + 2j },
-    { 2, 3, 4, 4 + 1j, 4 + 2j },
-    { 2, 2 + 1j, 2 + 2j, 2 + 3j },
-    { 2, 3, 2 + 1j, 3 + 1j }
+    { 2, 3, 4, 5 },  # -
+    { 3, 2 + 1j, 3 + 1j, 4 + 1j, 3 + 2j },  # +
+    { 2, 3, 4, 4 + 1j, 4 + 2j },  # L
+    { 2, 2 + 1j, 2 + 2j, 2 + 3j },  # |
+    { 2, 3, 2 + 1j, 3 + 1j }  # O
 ]
 
 
@@ -36,6 +36,15 @@ def _has_room(cache: dict[float, set[float]], rock: set[complex], jet: int) -> b
 
 def _fall(rock: set[complex]) -> set:
     return { r - 1j for r in rock }
+
+
+def _print(chamber: set[complex], rock: set[complex]) -> int:
+    system = chamber | rock
+    M = int(max(system, key=lambda c: c.imag).imag)
+    print('\n')
+    for y in range(M, 0, -1):
+        print(f'|{"".join([ "#" if x + 1j * y in system else "." for x in range(0, 7)])}|')
+    print('+-------+')
 
 
 def _run(jets: list[int], spawn: int) -> int:
@@ -67,10 +76,12 @@ def part1(jets: list[int]) -> int:
 
 
 def part2(jets: list[int]) -> int:
-    pass
+    return _run(jets, 1_000_000_000_000)
 
 
 if __name__ == '__main__':
     with open('input.txt') as f:
         jets = [ 1 if j == '>' else -1 for j in f.read().strip() ]
-    print(part1(jets))  # 3090
+    # print(part1(jets))  # 3090
+    assert part1(jets) == 3090
+    # print(part2(jets))  #

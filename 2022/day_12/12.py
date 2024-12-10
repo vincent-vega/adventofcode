@@ -4,16 +4,16 @@
 import heapq
 
 
-def _adj(world: dict, cur: (int, int)) -> list:
+def _adj(world: dict, cur: tuple[int, int]) -> list:
     x, y = cur
     return [ (x + dx, y + dy) for dx, dy in [ (-1, 0), (1, 0), (0, -1), (0, 1) ] if (x + dx, y + dy) in world ]
 
 
-def part1(world: dict, start: (int, int), end: (int, int)) -> int:
+def part1(world: dict, start: tuple[int, int], end: tuple[int, int]) -> int:
     return _count(world, start, end)
 
 
-def _count(world: dict, start: (int, int), end: (int, int)) -> int:
+def _count(world: dict, start: tuple[int, int], end: tuple[int, int]) -> int:
     x, y = start
     Q = [(0, x, y)]
     visited = set()
@@ -28,7 +28,7 @@ def _count(world: dict, start: (int, int), end: (int, int)) -> int:
     return -1
 
 
-def part2(world: dict, end: (int, int)) -> int:
+def part2(world: dict, end: tuple[int, int]) -> int:
     return min(filter(lambda n: n > 0, ( _count(world, (x, y), end) for (x, y), h in world.items() if h == 0 )))
 
 

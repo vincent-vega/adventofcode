@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from functools import lru_cache
+from functools import cache
 
 
-def _move(cur: (int, int), direction: str) -> (int, int):
+def _move(cur: tuple[int, int], direction: str) -> tuple[int, int]:
     x, y = cur
     if direction == 'nw':
         return x - 1, y + 0.5
@@ -22,8 +22,8 @@ def _move(cur: (int, int), direction: str) -> (int, int):
         raise Exception('Invalid direction')
 
 
-@lru_cache(maxsize=None)
-def _steps(cur: (int, int)) -> int:
+@cache
+def _steps(cur: tuple[int, int]) -> int:
     cnt = 0
     while cur != (0, 0):
         x, y = cur
@@ -39,14 +39,14 @@ def _steps(cur: (int, int)) -> int:
     return cnt
 
 
-def part1(path: list) -> int:
+def part1(path: list[str]) -> int:
     cur = (0, 0)
     for p in path:
         cur = _move(cur, p)
     return _steps(cur)
 
 
-def part2(path: list) -> int:
+def part2(path: list[str]) -> int:
     cur = (0, 0)
     M = 0
     for p in path:
