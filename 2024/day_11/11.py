@@ -25,7 +25,7 @@ def part1(stones: list[int]) -> int:
     return len(stones)
 
 
-def _blink2(stones: dict) -> dict:
+def _blink2(stones: dict[int, int]) -> dict[int, int]:
     nxt = defaultdict(int)
     for n, count in stones.items():
         for k in _conv(n):
