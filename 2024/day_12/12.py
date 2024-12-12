@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict
-from common.lib import _print, _adj
+from common.lib import _adj
 
 
-def _regions(garden: dict[tuple[int], str]):
+def _regions(garden: dict[tuple[int], str]) -> dict[int, set[tuple[int]]]:
     seen = set()
     regions = defaultdict(set)
     for x, y in ((x, y) for x, y in garden if (x, y) not in seen):
@@ -29,9 +29,12 @@ def part1(garden: dict[tuple[int], str]) -> int:
     return sum(len(r) * _perimeter(r) for r in regions.values())
 
 
+def _corners(x: int, y: int, region: set[tuple[int]]) -> int:
+    return sum(((x + dx, y) not in region and (x, y + dy) not in region) or ((x + dx, y) in region and (x, y + dy) in region and (x + dx, y + dy) not in region) for dx in (1, -1) for dy in (1, -1))
+
+
 def _sides(region: set[tuple[int]]) -> int:
-    # sides = { for r in regions for x, y in _adj(*r) }
-    pass
+    return sum(_corners(*coord, region - { coord }) for coord in region)
 
 
 def part2(garden: dict[tuple[int], str]) -> int:
@@ -39,13 +42,8 @@ def part2(garden: dict[tuple[int], str]) -> int:
     return sum(len(r) * _sides(r) for r in regions.values())
 
 
-# import pudb; pu.db
 if __name__ == '__main__':
     with open('input.txt') as f:
-        lines = f.read().splitlines()
-        # X = len(lines[0]) - 1
-        # Y = len(lines) - 1
-        garden = { (x, y): c for y, line in enumerate(lines) for x, c in enumerate(line) }
-    # print(part1(garden, (X, Y)))  # 1415378
-    assert part1(garden) == 1415378
-    # _print(part2(garden))  #
+        garden = { (x, y): c for y, line in enumerate(f.read().splitlines()) for x, c in enumerate(line) }
+    print(part1(garden))  # 1415378
+    print(part2(garden))  # 862714
