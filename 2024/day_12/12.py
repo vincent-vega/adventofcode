@@ -7,19 +7,16 @@ from common.lib import _print, _adj
 
 def _regions(garden: dict[tuple[int], str], limit: tuple[int]):
     X, Y = limit
-    g_seen = set()
+    seen = set()
     regions = defaultdict(set)
-    for x, y in ((x, y) for x in range(X + 1) for y in range(Y + 1) if (x, y) not in g_seen):
-        cur_r = garden[x, y]
-        r_seen = {(x, y)}
+    for x, y in ((x, y) for x in range(X + 1) for y in range(Y + 1) if (x, y) not in seen):
         idx = len(regions)
-        R = [(x, y)]
+        R = [ (x, y) ]
         while R:
             cur = R.pop()
-            g_seen.add(cur)
-            r_seen.add(cur)
+            seen.add(cur)
             regions[idx].add(cur)
-            for i, j in ((i, j) for i, j in _adj(*cur) if (i, j) in garden and (i, j) not in r_seen and garden[i, j] == cur_r):
+            for i, j in ((i, j) for i, j in _adj(*cur) if (i, j) in garden and garden[i, j] == garden[x, y] and (i, j) not in seen):
                 R.append((i, j))
     return regions
 
