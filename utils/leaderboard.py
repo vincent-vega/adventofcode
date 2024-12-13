@@ -3,10 +3,11 @@
 from datetime import datetime, timedelta, UTC
 import os
 import requests
+import sys
 
 
 def fetch_leaderboard_data(leaderboard_id):
-    url = f"https://adventofcode.com/2024/leaderboard/private/view/{leaderboard_id}.json"
+    url = f"https://adventofcode.com/{datetime.now().year}/leaderboard/private/view/{leaderboard_id}.json"
     response = requests.get(url, cookies={"session": os.getenv("AOC_SESSION", "")})
     if response.status_code == 200:
         return response.json()
@@ -25,6 +26,8 @@ if __name__ == '__main__':
                 sorted_days = sorted(member_data["completion_day_level"].items(), key=lambda x: int(x[0]))
 
                 for day, levels in sorted_days:
+                    if len(sys.argv) > 1 and sys.argv[1] != day:
+                        continue
                     print(f"  Day {day}:")
 
                     part1 = levels.get("1")

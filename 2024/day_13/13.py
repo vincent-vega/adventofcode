@@ -9,7 +9,9 @@ def _tokens(x1: int, y1: int, x2: int, y2: int, x: int, y: int, addend: int = 0)
     This function computes the values n1 and n2 using formulas derived from
     solving the linear system
     '''
-    n2 = (y1 * (x + addend) - x1 * (y + addend)) / (y1 * x2 - x1 * y2)
+    if x1 == 0 or (D := y1 * x2 - x1 * y2) == 0:
+        return 0
+    n2 = (y1 * (x + addend) - x1 * (y + addend)) / D
     n1 = ((x + addend) - x2 * n2) / x1
     return 3 * n1 + n2 if all(n % 1 == 0 for n in (n1, n2)) else 0
 
