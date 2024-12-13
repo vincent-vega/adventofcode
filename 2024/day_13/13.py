@@ -6,7 +6,7 @@ import re
 
 def _tokens(x1: int, y1: int, x2: int, y2: int, x: int, y: int, addend: int = 0) -> int:
     '''
-    This function computes the machines of n1 and n2 using formulas derived from
+    This function computes the values n1 and n2 using formulas derived from
     solving the linear system
     '''
     n2 = (y1 * (x + addend) - x1 * (y + addend)) / (y1 * x2 - x1 * y2)
