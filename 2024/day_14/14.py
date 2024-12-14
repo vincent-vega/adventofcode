@@ -21,6 +21,7 @@ def _count(robots: list[tuple[int]], X: int, Y: int, quadrant: int) -> int:
         return sum([ 1 for x, y, _, __ in robots if x < X and y > Y ])
     elif quadrant == 3:
         return sum([ 1 for x, y, _, __ in robots if x > X and y > Y ])
+    raise Exception('Invalid quadrant')
 
 
 def part1(robots: list[tuple[int]], X: int, Y: int) -> int:
@@ -32,10 +33,8 @@ def part1(robots: list[tuple[int]], X: int, Y: int) -> int:
 def _render(robots: list[tuple[int]], N: int, X: int, Y: int):
     robots = { (x, y) for x, y, _, __ in robots }
     img = Image.new('1', (X, Y), color=0)
-    for y in range(100):
-        for x in range(100):
-            if (x, y) in robots:
-                img.putpixel((x, y), 1)
+    for x, y in ((x, y) for x in range(X) for y in range(Y) if (x, y) in robots):
+        img.putpixel((x, y), 1)
     img.save(f'{N}.png')
 
 
