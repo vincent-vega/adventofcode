@@ -39,7 +39,7 @@ def _render(robots: list[tuple[int]], N: int, X: int, Y: int):
 
 
 def part2(robots: list[tuple[int]], X: int, Y: int, seconds: int):
-    for N in range(seconds):
+    for _ in range(seconds):
         robots = _move(robots, X, Y)
     _render(robots, seconds, X, Y)
 
