@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from common.lib import _print, _manhattan
+from common.lib import _manhattan
 import heapq
+
 
 def _nxt(x: int, y: int, d: int) -> tuple[int]:
     if d == 0:
@@ -37,12 +38,37 @@ def part1(maze: set[tuple[int]], S: tuple[int], E: tuple[int]) -> int:
     return -1
 
 
-def part2(values):
-    pass
+def part2(maze: set[tuple[int]], S: tuple[int], E: tuple[int]) -> int:
+    Q = [(0, 0, *S, 1, { S })]
+    history = {}  # (x, y), direction -> score
+    best_score = None
+    best_tiles = set()
+    while Q:
+        _, score, x, y, direction, visited = heapq.heappop(Q)
+        for spin in (0, 1, -1):
+            d = (direction + spin) % 4
+            if (nxt := _nxt(x, y, d)) in maze:
+                continue
+            s = score + 1 + 1000 * abs(spin)
+
+            if (nxt, d) not in history or history[nxt, d] > s:
+                history[nxt, d] = s
+            elif history[nxt, d] < s:
+                continue
+
+            if nxt == E:
+                if best_score is None:
+                    best_score = s
+                elif best_score < s:
+                    continue
+                best_tiles |= visited | {E}
+                continue
+            heapq.heappush(Q, (s + _manhattan(*nxt, *E), s, *nxt, d, visited | {nxt}))
+    return len(best_tiles)
 
 
-def _parse(file):
-    with open(file) as f:
+if __name__ == '__main__':
+    with open('input.txt') as f:
         maze = set()
         for x, y, c in ((x, y, c) for y, line in enumerate(f) for x, c in enumerate(line)):
             if c == 'S':
@@ -51,11 +77,5 @@ def _parse(file):
                 E = (x, y)
             elif c == '#':
                 maze.add((x, y))
-    return maze, S, E
-
-
-# import pudb; pu.db
-if __name__ == '__main__':
-    maze, S, E = _parse('input.txt')
     print(part1(maze, S, E))  # 88468
-    # _print(part2(values))  #
+    print(part2(maze, S, E))  # 616
