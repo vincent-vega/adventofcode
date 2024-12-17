@@ -2,12 +2,17 @@
 
 from datetime import datetime, timedelta, UTC
 import os
+import re
 import requests
 import sys
 
 
 def fetch_leaderboard_data(leaderboard_id):
-    url = f"https://adventofcode.com/{datetime.now().year}/leaderboard/private/view/{leaderboard_id}.json"
+    if m := re.search(r'(\d{4})/?(day_\d{2}(/.*)?)?$', os.getcwd()):
+        year = m.group(1)
+    else:
+        year = datetime.now().year
+    url = f"https://adventofcode.com/{year}/leaderboard/private/view/{leaderboard_id}.json"
     response = requests.get(url, cookies={"session": os.getenv("AOC_SESSION", "")})
     if response.status_code == 200:
         return response.json()
