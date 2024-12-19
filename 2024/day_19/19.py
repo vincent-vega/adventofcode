@@ -9,15 +9,15 @@ def part1(patterns: set[str], designs: list[str]) -> int:
     S = max(map(len, patterns))
 
     @cache
-    def _match(design: str, s: int, S: int) -> int:
+    def _match(design: str) -> int:
         if design in patterns:
             return True
         for n in range(s, min(S, len(design)) + 1):
-            if design[:n] in patterns and _match(design[n:], s, S):
+            if design[:n] in patterns and _match(design[n:]):
                 return True
         return False
 
-    return sum(_match(d, s, S) for d in designs)
+    return sum(_match(d) for d in designs)
 
 
 def part2(patterns: set[str], designs: list[str]) -> int:
@@ -25,17 +25,14 @@ def part2(patterns: set[str], designs: list[str]) -> int:
     S = max(map(len, patterns))
 
     @cache
-    def _match(design: str, s: int, S: int) -> int:
+    def _match(design: str) -> int:
         count = 0
         for n in range(s, min(S, len(design)) + 1):
             if design[:n] in patterns:
-                if len(design) - n == 0:
-                    count += 1
-                elif (c := _match(design[n:], s, S)) > 0:
-                    count += c
+                count += 1 if len(design) == n else _match(design[n:])
         return count
 
-    return sum(_match(d, s, S) for d in designs)
+    return sum(_match(d) for d in designs)
 
 
 if __name__ == '__main__':
