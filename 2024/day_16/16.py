@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from common.lib import _manhattan
+from common.lib import manhattan
 import heapq
 
 
@@ -34,7 +34,7 @@ def part1(maze: set[tuple[int]], S: tuple[int], E: tuple[int]) -> int:
 
             if nxt == E:
                 return s
-            heapq.heappush(Q, (s + _manhattan(*nxt, *E), s, *nxt, d))
+            heapq.heappush(Q, (s + manhattan(*nxt, *E), s, *nxt, d))
     return -1
 
 
@@ -53,17 +53,17 @@ def part2(maze: set[tuple[int]], S: tuple[int], E: tuple[int]) -> int:
 
             if (nxt, d) not in history or history[nxt, d] > s:
                 history[nxt, d] = s
+            elif best_score and best_score < s:
+                return len(best_tiles)
             elif history[nxt, d] < s:
                 continue
 
             if nxt == E:
                 if best_score is None:
                     best_score = s
-                elif best_score < s:
-                    continue
-                best_tiles |= visited | {E}
-                continue
-            heapq.heappush(Q, (s + _manhattan(*nxt, *E), s, *nxt, d, visited | {nxt}))
+                best_tiles |= visited | { E }
+            else:
+                heapq.heappush(Q, (s + manhattan(*nxt, *E), s, *nxt, d, visited | { nxt }))
     return len(best_tiles)
 
 
