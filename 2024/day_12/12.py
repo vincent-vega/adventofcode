@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from collections import defaultdict
-from common.lib import _adj
+from common.lib import adj
 
 
 def _regions(garden: dict[tuple[int], str]) -> dict[int, set[tuple[int]]]:
@@ -15,13 +15,13 @@ def _regions(garden: dict[tuple[int], str]) -> dict[int, set[tuple[int]]]:
             cur = R.pop()
             seen.add(cur)
             regions[region_id].add(cur)
-            for i, j in ((i, j) for i, j in _adj(*cur) if (i, j) in garden and garden[i, j] == garden[x, y] and (i, j) not in seen):
+            for i, j in ((i, j) for i, j in adj(*cur) if (i, j) in garden and garden[i, j] == garden[x, y] and (i, j) not in seen):
                 R.append((i, j))
     return regions
 
 
 def _perimeter(region: set[tuple[int]]) -> int:
-    return sum(1 for x, y in region for i, j in _adj(x, y) if (i, j) not in region)
+    return sum(1 for x, y in region for i, j in adj(x, y) if (i, j) not in region)
 
 
 def part1(garden: dict[tuple[int], str]) -> int:

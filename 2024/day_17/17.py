@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from common.lib import _print
+from common.lib import pcprint
 from dataclasses import dataclass
 import re
 
@@ -30,7 +30,7 @@ def _combo(computer: Computer, operand: int) -> int:
 def _run(computer: Computer, program: list[int]) -> str:
     ip = 0
     out = []
-    while ip < len(program):
+    while 0 <= ip < len(program):
         match opcode := program[ip]:
             case 0:
                 computer.A = computer.A // 2 ** _combo(computer, program[ip + 1])
@@ -68,4 +68,4 @@ if __name__ == '__main__':
     with open('input.txt') as f:
         A, B, C, *program = map(int, re.findall(r'\d+', f.read()))
     print(part1(Computer(A, B, C), program))  # 5,1,3,4,3,7,2,1,7
-    _print(part2(program))  #
+    pcprint(part2(program))  #

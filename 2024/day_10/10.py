@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from common.lib import _adj
+from common.lib import adj
 
 
 def _score(heights: dict[tuple[int, int], int], start: tuple[int, int]) -> int:
@@ -10,7 +10,7 @@ def _score(heights: dict[tuple[int, int], int], start: tuple[int, int]) -> int:
     D = [ (start, 0) ]
     while D:
         cur, n = D.pop()
-        for nxt in (nxt for nxt in _adj(*cur) if nxt in heights and heights[nxt] == n + 1):
+        for nxt in (nxt for nxt in adj(*cur) if nxt in heights and heights[nxt] == n + 1):
             if heights[nxt] == 9 and nxt not in visited:
                 score += 1
                 visited.add(nxt)
@@ -25,7 +25,7 @@ def _rating(heights: dict[tuple[int, int], int], start: tuple[int, int]) -> int:
     D = [ (start, 0, [ start ]) ]
     while D:
         cur, n, path = D.pop()
-        for nxt in (nxt for nxt in _adj(*cur) if nxt in heights and heights[nxt] == n + 1):
+        for nxt in (nxt for nxt in adj(*cur) if nxt in heights and heights[nxt] == n + 1):
             path.append(nxt)
             if heights[nxt] == 9 and tuple(path) not in seen:
                 score += 1

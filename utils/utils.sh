@@ -10,7 +10,6 @@ download_aoc_input() {
         local day_padded="${BASH_REMATCH[2]}"
         local day=$((10#$day_padded))
         curl "https://adventofcode.com/${year}/day/${day}/input" \
-            -H "Cookie: session=$AOC_SESSION" \
-            -o input.txt
+            -H "Cookie: session=$AOC_SESSION" | tee input.txt
     fi
 }

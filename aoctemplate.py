@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from common.lib import _print
+from common.lib import pcprint
 
 
 def part1(values):
@@ -16,5 +16,5 @@ def part2(values):
 if __name__ == '__main__':
     with open('input.txt') as f:
         values = list(map(int, f.read().splitlines()))
-    _print(part1(values))  #
-    _print(part2(values))  #
+    pcprint(part1(values))  #
+    pcprint(part2(values))  #
