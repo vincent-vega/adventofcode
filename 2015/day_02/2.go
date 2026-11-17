@@ -17,8 +17,8 @@ func ribbon(l, w, h int) int {
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatal("usage: go run . <input>")
+	if len(os.Args) != 2 {
+		log.Fatalf("usage: %s <input>", os.Args[0])
 	}
 	f, err := os.Open(os.Args[1])
 	if err != nil {

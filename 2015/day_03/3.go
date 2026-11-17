@@ -23,8 +23,8 @@ func (p point) move(c rune) point {
 }
 
 func main() {
-	if len(os.Args) < 2 {
-		log.Fatal("usage: go run . <input>")
+	if len(os.Args) != 2 {
+		log.Fatalf("usage: %s <input>", os.Args[0])
 	}
 	data, err := os.ReadFile(os.Args[1])
 	if err != nil {
