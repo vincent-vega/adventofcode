@@ -8,35 +8,37 @@ Instruction = namedtuple('Instruction', [ 'action', 'start', 'end' ])
 
 
 def part1(instructions: list) -> int:
-    grid = {}
+    grid = [0]*1000*1000
     for i in instructions:
         start_x, start_y = i.start
         end_x, end_y = i.end
         for y in range(start_y, end_y + 1):
             for x in range(start_x, end_x + 1):
+                n = y*1000 + x
                 if i.action == 'on':
-                    grid[(x, y)] = True
+                    grid[n] = True
                 elif i.action == 'off':
-                    grid[(x, y)] = False
+                    grid[n] = False
                 else:
-                    grid[(x, y)] = not grid.get((x, y), False)
-    return sum(( 1 for v in grid.values() if v ))
+                    grid[n] = not grid[n]
+    return sum(grid)
 
 
 def part2(instructions: list) -> int:
-    grid = {}
+    grid = [0]*1000*1000
     for i in instructions:
         start_x, start_y = i.start
         end_x, end_y = i.end
         for y in range(start_y, end_y + 1):
             for x in range(start_x, end_x + 1):
+                n = y*1000 + x
                 if i.action == 'on':
-                    grid[(x, y)] = grid.get((x, y), 0) + 1
+                    grid[n] += 1
                 elif i.action == 'off':
-                    grid[(x, y)] = max(0, grid.get((x, y), 0) - 1)
+                    grid[n] = grid[n] - 1 if grid[n] else 0
                 else:
-                    grid[(x, y)] = grid.get((x, y), 0) + 2
-    return sum(grid.values())
+                    grid[n] += 2
+    return sum(grid)
 
 
 def _parse(line: str) -> Instruction:
